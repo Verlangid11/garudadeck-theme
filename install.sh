@@ -1,13 +1,12 @@
 #!/bin/bash
 # GarudaDeck installer via GHCR docker image public, tanpa token, pola verlang docker.
 # Repo garudadeck-dist tetap private, etalase ini garudadeck-theme, package ghcr.io public.
-# Pakai satu command: bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh)
-# Aksi: bash <(curl -fsSL ...) check | backup | install | rollback, atau PANEL_DIR=/path bash <(curl ...)
+# Satu command: bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh)
+# Menu angka: 1 install, 2 check, 3 backup, 4 rollback, 5 keluar. Argumen langsung tetap bisa: check, backup, install, rollback.
 set -euo pipefail
 SELF_URL="https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh"
 if [ "$(id -u)" != "0" ]; then
   if command -v sudo >/dev/null 2>&1; then
-    echo "[garudadeck] bukan root, naik ke sudo otomatis"
     if [ -f "${0:-}" ] && [ "${0:-bash}" != "bash" ] && [ "$0" != "-bash" ] && [ "$0" != "/dev/fd/63" ] && [[ "$0" != /dev/fd/* ]]; then
       exec sudo -E bash "$0" "$@"
     else
@@ -17,26 +16,68 @@ if [ "$(id -u)" != "0" ]; then
       exec sudo -E bash "$TMP_SELF" "$@"
     fi
   else
-    echo "[garudadeck] ERROR: jalankan sebagai root atau install sudo dulu, contoh: apt install sudo -y" >&2
+    echo "ERROR: jalankan sebagai root atau install sudo dulu, contoh: apt install sudo -y" >&2
     exit 1
   fi
 fi
+if [ -t 0 ] && [ $# -eq 0 ]; then
+  :
+elif [ $# -eq 0 ]; then
+  set -- install
+fi
+C_RESET="\033[0m"; C_RED="\033[1;31m"; C_GREEN="\033[1;32m"; C_YELLOW="\033[1;33m"; C_BLUE="\033[1;34m"; C_MAGENTA="\033[1;35m"; C_CYAN="\033[1;36m"; C_WHITE="\033[1;37m"
+say() { printf "%b%s%b\n" "$1" "$2" "$C_RESET"; }
+banner() {
+  clear 2>/dev/null || true
+  say "$C_RED" "  ____                   _       ____            _"
+  say "$C_RED" " / ___| __ _ _ __ _   _| | __ _|  _ \\  ___  ___| | __"
+  say "$C_YELLOW" "| |  _ / _\` | '__| | | | |/ _\` | | | |/ _ \\/ __| |/ /"
+  say "$C_YELLOW" "| |_| | (_| | |  | |_| | | (_| | |_| |  __/ (__|   <"
+  say "$C_GREEN" " \\____|\\__,_|_|   \\__,_|_|\\__,_|____/ \\___|\\___|_|\\_\\"
+  say "$C_CYAN" "  GarudaDeck for Pterodactyl 1.11 sampai 1.15, by verlangid dari Indonesia, MIT"
+  say "$C_WHITE" "  Panel: ${PANEL_DIR:-/var/www/pterodactyl}, paket: ghcr.io/verlangid11/garudadeck-theme:${TAG:-latest}"
+  echo ""
+}
+menu() {
+  banner
+  say "$C_GREEN" "  [1] Install GarudaDeck"
+  say "$C_BLUE" "  [2] Cek VPS dan panel"
+  say "$C_YELLOW" "  [3] Backup saja"
+  say "$C_MAGENTA" "  [4] Rollback ke backup"
+  say "$C_RED" "  [5] Keluar"
+  echo ""
+  printf "%b" "$C_CYAN"
+  read -r -p "  Pilih [1-5] (default 1): " PICK
+  printf "%b" "$C_RESET"
+  PICK="${PICK:-1}"
+  case "$PICK" in
+    1) ACTION="install" ;; 2) ACTION="check" ;; 3) ACTION="backup" ;; 4) ACTION="rollback" ;; 5) say "$C_GREEN" "  Sampai jumpa bro"; exit 0 ;; *) say "$C_RED" "  Pilihan tidak dikenal, pakai 1"; ACTION="install" ;;
+  esac
+}
 PACKAGE="${PACKAGE:-ghcr.io/verlangid11/garudadeck-theme}"
 TAG="${GARUDADECK_TAG:-latest}"
 PANEL_DIR="${PANEL_DIR:-/var/www/pterodactyl}"
-ACTION="${1:-install}"
+ACTION=""
+if [ $# -gt 0 ]; then
+  case "${1:-}" in install|check|backup|rollback) ACTION="$1" ;; *) ACTION="" ;; esac
+fi
+if [ -z "$ACTION" ]; then
+  if [ -t 0 ]; then menu; else ACTION="install"; fi
+fi
 TMP_DIR="$(mktemp -d)"
 cleanup() { rm -rf "$TMP_DIR"; }
 trap cleanup EXIT
-log() { echo "[garudadeck] $1"; }
-fail() { echo "[garudadeck] ERROR: $1" >&2; exit 1; }
+log() { say "$C_CYAN" "[garudadeck] $1"; }
+ok() { say "$C_GREEN" "[garudadeck] $1"; }
+warn() { say "$C_YELLOW" "[garudadeck] $1"; }
+fail() { say "$C_RED" "[garudadeck] ERROR: $1"; exit 1; }
 need() { command -v "$1" >/dev/null 2>&1 || fail "$1 belum terpasang, install dulu: apt install $1 -y"; }
 find_panel() {
   if [ -f "$1/config/app.php" ] && [ -f "$1/artisan" ]; then echo "$1"; return 0; fi
   return 1
 }
 if ! find_panel "$PANEL_DIR" >/dev/null 2>&1; then
-  log "panel tidak ketemu di $PANEL_DIR, cari otomatis"
+  warn "panel tidak ketemu di $PANEL_DIR, cari otomatis"
   FOUND=""
   for d in /var/www/pterodactyl /var/www/panel /var/www/ptero /srv/pterodactyl /opt/pterodactyl /var/www/html; do
     if find_panel "$d" >/dev/null 2>&1; then FOUND="$d"; break; fi
@@ -45,22 +86,17 @@ if ! find_panel "$PANEL_DIR" >/dev/null 2>&1; then
     CAND="$(find /var/www -maxdepth 4 -name artisan -type f 2>/dev/null | head -1 || true)"
     if [ -n "$CAND" ]; then
       CAND_DIR="$(dirname "$CAND")"
-      if find_panel "$CAND_DIR" >/dev/null 2>&1; then FOUND="$CAND_DIR"; fi
+      if find_panel "$CAND_DIR" >/dev/null 2>&1; then FOUND="$CAND"; fi
     fi
   fi
   if [ -n "$FOUND" ]; then
-    log "ketemu panel di $FOUND, pakai itu"
+    ok "ketemu panel di $FOUND, pakai itu"
     PANEL_DIR="$FOUND"
   else
-    echo "[garudadeck] ERROR: panel Pterodactyl tidak ketemu di VPS ini" >&2
-    echo "[garudadeck] ciri: tidak ada artisan dan config/app.php di /var/www" >&2
-    echo "[garudadeck] solusi: install panel dulu, atau tentukan manual:" >&2
-    echo "[garudadeck] PANEL_DIR=/path/panel bash <(curl -fsSL $SELF_URL)" >&2
-    echo "[garudadeck] contoh: sudo PANEL_DIR=/var/www/pterodactyl bash <(curl -fsSL $SELF_URL) check" >&2
-    exit 1
+    fail "panel Pterodactyl tidak ketemu. Ciri: tidak ada artisan dan config/app.php di /var/www. Install panel dulu atau set PANEL_DIR manual"
   fi
 fi
-log "panel ketemu di $PANEL_DIR"
+ok "panel ketemu di $PANEL_DIR"
 need curl
 need tar
 case "$ACTION" in install|check|backup|rollback) ;; *) fail "aksi tidak dikenal: $ACTION, pilih: install, check, backup, rollback" ;; esac
