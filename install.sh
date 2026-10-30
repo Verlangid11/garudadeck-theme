@@ -25,34 +25,60 @@ if [ -t 0 ] && [ $# -eq 0 ]; then
 elif [ $# -eq 0 ]; then
   set -- install
 fi
-C_RESET="\033[0m"; C_RED="\033[1;31m"; C_GREEN="\033[1;32m"; C_YELLOW="\033[1;33m"; C_BLUE="\033[1;34m"; C_MAGENTA="\033[1;35m"; C_CYAN="\033[1;36m"; C_WHITE="\033[1;37m"
+C_RESET="\033[0m"; C_RED="\033[1;31m"; C_GREEN="\033[1;32m"; C_YELLOW="\033[1;33m"; C_BLUE="\033[1;34m"; C_MAGENTA="\033[1;35m"; C_CYAN="\033[1;36m"; C_WHITE="\033[1;37m"; C_DIM="\033[2m"
 say() { printf "%b%s%b\n" "$1" "$2" "$C_RESET"; }
 banner() {
   clear 2>/dev/null || true
-  say "$C_RED" "  ____                   _       ____            _"
-  say "$C_RED" " / ___| __ _ _ __ _   _| | __ _|  _ \\  ___  ___| | __"
-  say "$C_YELLOW" "| |  _ / _\` | '__| | | | |/ _\` | | | |/ _ \\/ __| |/ /"
-  say "$C_YELLOW" "| |_| | (_| | |  | |_| | | (_| | |_| |  __/ (__|   <"
-  say "$C_GREEN" " \\____|\\__,_|_|   \\__,_|_|\\__,_|____/ \\___|\\___|_|\\_\\"
+  say "$C_RED" "   ____                   _       ____            _"
+  say "$C_RED" "  / ___| __ _ _ __ _   _| | __ _|  _ \\\\  ___  ___| | __"
+  say "$C_YELLOW" " | |  _ / _\` | '__| | | | |/ _\` | | | |/ _ \\\\/ __| |/ /"
+  say "$C_YELLOW" " | |_| | (_| | |  | |_| | | (_| | |_| |  __/ (__|   <"
+  say "$C_GREEN" "  \\\\____|\\\\__,_|_|   \\\\__,_|_|\\\\__,_|____/ \\\\___|\\\\___|_|\\\\_\\\\"
   say "$C_CYAN" "  GarudaDeck for Pterodactyl 1.11 sampai 1.15, by verlangid dari Indonesia, MIT"
-  say "$C_WHITE" "  Panel: ${PANEL_DIR:-/var/www/pterodactyl}, paket: ghcr.io/verlangid11/garudadeck-theme:${TAG:-latest}"
+  say "$C_DIM" "  Panel: ${PANEL_DIR:-/var/www/pterodactyl}, paket: ghcr.io/verlangid11/garudadeck-theme:${TAG:-latest}"
   echo ""
 }
 menu() {
   banner
-  say "$C_GREEN" "  [1] Install GarudaDeck"
-  say "$C_BLUE" "  [2] Cek VPS dan panel"
-  say "$C_YELLOW" "  [3] Backup saja"
-  say "$C_MAGENTA" "  [4] Rollback ke backup"
+  say "$C_WHITE" "  Mau ngapain hari ini bro?"
+  say "$C_GREEN" "  [1] Install GarudaDeck, full build plus backup otomatis"
+  say "$C_BLUE" "  [2] Cek VPS dan panel, tanpa ubah apa pun"
+  say "$C_YELLOW" "  [3] Backup saja, kode plus database"
+  say "$C_MAGENTA" "  [4] Rollback, kembali ke backup terakhir"
   say "$C_RED" "  [5] Keluar"
   echo ""
+  say "$C_DIM" "  Install butuh 2 sampai 5 menit, paling lama di yarn build."
   printf "%b" "$C_CYAN"
   read -r -p "  Pilih [1-5] (default 1): " PICK
   printf "%b" "$C_RESET"
   PICK="${PICK:-1}"
   case "$PICK" in
-    1) ACTION="install" ;; 2) ACTION="check" ;; 3) ACTION="backup" ;; 4) ACTION="rollback" ;; 5) say "$C_GREEN" "  Sampai jumpa bro"; exit 0 ;; *) say "$C_RED" "  Pilihan tidak dikenal, pakai 1"; ACTION="install" ;;
+    1) ACTION="install" ;; 2) ACTION="check" ;; 3) ACTION="backup" ;; 4) ACTION="rollback" ;; 5) say "$C_GREEN" "  Siap, sampai jumpa bro"; exit 0 ;; *) say "$C_RED" "  Pilihan tidak dikenal, jalanin install"; ACTION="install" ;;
   esac
+}
+spin_pull() {
+  local msg="$1"; shift
+  local frames="⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏"
+  printf "%b" "$C_CYAN" >&2
+  "$@" >/tmp/gd-pull.log 2>&1 &
+  local pid=$!
+  local i=0
+  while kill -0 $pid 2>/dev/null; do
+    i=$(( (i + 1) % 10 ))
+    local f
+    f=$(echo "$frames" | cut -d' ' -f$((i + 1)))
+    printf "\r  %s %s" "$f" "$msg" >&2
+    sleep 0.12
+  done
+  wait $pid
+  local code=$?
+  printf "\r%b" "$C_RESET" >&2
+  if [ $code -ne 0 ]; then
+    tail -5 /tmp/gd-pull.log >&2 || true
+    return $code
+  fi
+  say "$C_GREEN" "  done: $msg"
+  return 0
 }
 PACKAGE="${PACKAGE:-ghcr.io/verlangid11/garudadeck-theme}"
 TAG="${GARUDADECK_TAG:-latest}"
@@ -76,8 +102,10 @@ find_panel() {
   if [ -f "$1/config/app.php" ] && [ -f "$1/artisan" ]; then echo "$1"; return 0; fi
   return 1
 }
+if [ -t 0 ] && [ "$ACTION" = "install" ]; then banner; fi
+say "$C_WHITE" "  Halo bro, GarudaDeck siap jalan di $PANEL_DIR, aksi $ACTION."
 if ! find_panel "$PANEL_DIR" >/dev/null 2>&1; then
-  warn "panel tidak ketemu di $PANEL_DIR, cari otomatis"
+  warn "panel tidak ketemu di $PANEL_DIR, cari otomatis dulu"
   FOUND=""
   for d in /var/www/pterodactyl /var/www/panel /var/www/ptero /srv/pterodactyl /opt/pterodactyl /var/www/html; do
     if find_panel "$d" >/dev/null 2>&1; then FOUND="$d"; break; fi
@@ -104,14 +132,14 @@ OWNER_LC="$(echo "$PACKAGE" | cut -d/ -f2 | tr '[:upper:]' '[:lower:]')"
 PKG_REAL="ghcr.io/${OWNER_LC}/garudadeck-theme:${TAG}"
 ARCHIVE="$TMP_DIR/theme.tar.gz"
 EXTRACT="$TMP_DIR/extract"
-log "GarudaDeck via GHCR docker public, paket $PKG_REAL, panel $PANEL_DIR, aksi $ACTION"
+log "paket $PKG_REAL, panel $PANEL_DIR, aksi $ACTION"
 mkdir -p "$EXTRACT"
 if command -v docker >/dev/null 2>&1; then
-  log "tarik via docker pull tanpa token"
-  docker pull "$PKG_REAL" || fail "gagal pull $PKG_REAL, cek koneksi atau coba GARUDADECK_TAG=latest"
+  spin_pull "tarik paket public tanpa token" docker pull "$PKG_REAL" || fail "gagal pull $PKG_REAL, cek koneksi atau coba GARUDADECK_TAG=latest"
   CID="$(docker create "$PKG_REAL")"
   docker cp "$CID:/theme.tar.gz" "$ARCHIVE" || fail "gagal salin dari image"
   docker rm "$CID" >/dev/null
+  ok "paket ketarik, lanjut $ACTION"
 else
   need python3
   log "docker tidak ada, tarik via API GHCR tanpa token"
@@ -120,7 +148,7 @@ else
   MANIFEST="$(curl -fsSL -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.docker.distribution.manifest.v2+json" "https://ghcr.io/v2/${OWNER_LC}/garudadeck-theme/manifests/${TAG}")" || fail "manifest $TAG tidak ketemu, coba GARUDADECK_TAG=latest"
   DIGEST="$(echo "$MANIFEST" | python3 -c "import json,sys; d=json.load(sys.stdin); ls=d.get('layers',[]); print(ls[-1]['digest'] if ls else '')")"
   [ -n "$DIGEST" ] || fail "layer tidak ketemu di $TAG"
-  curl -fsSL -H "Authorization: Bearer $TOKEN" "https://ghcr.io/v2/${OWNER_LC}/garudadeck-theme/blobs/$DIGEST" -o /tmp/layer.tar || fail "unduh layer gagal"
+  spin_pull "unduh layer GHCR" curl -fsSL -H "Authorization: Bearer $TOKEN" "https://ghcr.io/v2/${OWNER_LC}/garudadeck-theme/blobs/$DIGEST" -o /tmp/layer.tar || fail "unduh layer gagal"
   tar -xzf /tmp/layer.tar -C "$TMP_DIR" || fail "ekstrak layer gagal"
   FOUND_LAYER="$(find "$TMP_DIR" -name "theme.tar.gz" | head -1)"
   [ -n "$FOUND_LAYER" ] || fail "theme.tar.gz tidak ada di image"
@@ -129,5 +157,5 @@ fi
 tar -xzf "$ARCHIVE" -C "$EXTRACT" || fail "arsip rusak"
 SWITCHER="$EXTRACT/theme-switcher"
 [ -f "$SWITCHER/install.sh" ] || fail "install.sh tidak ketemu di paket"
-log "jalankan $ACTION"
+log "paket siap, jalanin $ACTION sekarang"
 PANEL_DIR="$PANEL_DIR" bash "$SWITCHER/install.sh" "$ACTION"
