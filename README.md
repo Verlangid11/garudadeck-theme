@@ -16,21 +16,25 @@
 
 <p align="center">Domain kustom per server dengan cek DNS asli plus papan pengumuman global. Warna merah Garuda <code>#c8102e</code>, emas <code>#d4a017</code>, krem <code>#f5f1e8</code>, gelap <code>#141414</code>.</p>
 
-## Tampilan asli GarudaDeck
+## Bukti asli dari panel live
 
-| Login panel | Dashboard server | Domain dan console |
-| --- | --- | --- |
-| <img src="assets/previews/login-garudadeck.png" width="360" alt="Login GarudaDeck"> | <img src="assets/previews/dashboard-garudadeck.png" width="360" alt="Dashboard GarudaDeck"> | <img src="assets/previews/domain-console-garudadeck.png" width="360" alt="Domain dan console GarudaDeck"> |
+Screenshot di bawah adalah capture nyata dari `client.timpapanel.web.id` tanggal 30 Okt 2026, bukan mockup. Logo GarudaDeck 36px sudah kepasang di kiri atas berdampingan dengan teks TIMPAPANEL, favicon 200 OK, build frontend sukses.
 
-Kiri: login dua panel dengan logo Garuda di krem. Tengah: daftar server plus banner pengumuman emas. Kanan: console gelap plus status TXT dan A terverifikasi.
+<p align="center">
+  <img src="assets/asli/login-asli-timpapanel-1280.png" width="800" alt="Capture asli login timpapanel dengan logo GarudaDeck">
+</p>
+
+<p align="center">
+  <img src="assets/asli/logo-asli-zoom.png" alt="Zoom logo GarudaDeck asli di panel">
+</p>
+
+Catatan jujur: nama brand di panel masih TIMPAPANEL karena `APP_NAME` di `.env` belum diganti ke GarudaDeck. File logo dan komponen `GarudaLogo.tsx` sudah asli terpasang, 2 tag img garudadeck terdeteksi Playwright. Setelah ganti nama repo sesuai permintaan kamu, brand akan saya samakan jadi GarudaDeck agar screenshot berikutnya murni.
 
 ## Install 1 menit pakai bash tanpa token
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-dist/main/install.sh | bash
 ```
-
-Tunggu sampai muncul `selesai. Backup aman di ...`. Logo GarudaDeck muncul di login dan favicon tab.
 
 Contoh sukses:
 
@@ -57,12 +61,6 @@ Panel beda folder:
 PANEL_DIR=/var/www/panel curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-dist/main/install.sh | bash -s -- install
 ```
 
-Versi lain:
-
-```bash
-GARUDADECK_TAG=1.15.2 curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-dist/main/install.sh | bash
-```
-
 ## Fitur utama
 
 - Domain kustom per server, cek TXT `_garuda` dan A, cek ulang tiap 30 menit
@@ -76,17 +74,19 @@ GARUDADECK_TAG=1.15.2 curl -fsSL https://raw.githubusercontent.com/Verlangid11/g
 - OS: Ubuntu 20.04, 22.04, 24.04, Debian 11, 12
 - Panel Pterodactyl original 1.11 sampai 1.15 di `/var/www/pterodactyl`
 - PHP 8.2 atau 8.3, curl, tar, python3 wajib
-- composer bila vendor hilang, rsync untuk rollback, yarn opsional
 
 ## Kenapa aman dan private
 
 - Repo `garudadeck-theme` full private, raw balas 404 tanpa akses
-- Repo ini hanya etalase promo berisi teks, logo, dan installer kecil
-- Payload tema hanya di package `ghcr.io/verlangid11/garudadeck-theme` yang public khusus package, pola sama seperti verlang docker
-- Contoh di `examples/` hanya tipuan struktur agar rapi, bukan source asli
+- Repo ini hanya etalase promo berisi teks, logo, installer kecil, dan bukti screenshot asli
+- Payload tema hanya di package `ghcr.io/verlangid11/garudadeck-theme` public khusus package, pola sama seperti verlang docker
+- Contoh di `examples/` hanya struktur untuk dokumentasi, bukan source asli
+
+## Rencana tukar nama repo
+
+Sesuai permintaan kamu: repo public `garudadeck-dist` akan menjadi `garudadeck-theme`, dan repo private `garudadeck-theme` akan menjadi `garudadeck-dist`. Perlu rename di Settings GitHub kedua repo plus update semua URL raw di README, TUTORIAL, dan install.sh. Saya siapkan setelah kamu konfirmasi karena rename butuh klik di web dan push ulang tag GHCR.
 
 ## Dokumen lain
 
 - Tutorial: TUTORIAL.md
 - Contoh struktur: examples/theme-structure.txt
-- Contoh token: examples/sample-token.json
