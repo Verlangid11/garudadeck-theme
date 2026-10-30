@@ -14,19 +14,7 @@
 
 <p align="center"><b>Tema Pterodactyl buatan verlangid dari Indonesia.</b> Install satu baris bash tanpa token.</p>
 
-<p align="center">Domain kustom per server dengan cek DNS asli plus papan pengumuman global. Warna merah Garuda <code>#c8102e</code>, emas <code>#d4a017</code>, krem <code>#f5f1e8</code>, gelap <code>#141414</code>.</p>
-
-## Bukti asli dari panel live
-
-Capture nyata dari `client.timpapanel.web.id`, bukan mockup. Logo GarudaDeck 36px sudah kepasang di kiri atas, build frontend sukses, favicon 200 OK.
-
-<p align="center">
-  <img src="assets/asli/login-asli-timpapanel-1280.png" width="800" alt="Capture asli login panel dengan logo GarudaDeck">
-</p>
-
-<p align="center">
-  <img src="assets/asli/logo-asli-zoom.png" alt="Zoom logo GarudaDeck asli">
-</p>
+<p align="center">Semua screenshot di bawah adalah capture nyata dari panel live <code>client.timpapanel.web.id</code>, bukan mockup.</p>
 
 ## Install 1 menit
 
@@ -40,25 +28,64 @@ curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/i
 curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh | bash -s -- rollback
 ```
 
+## Galeri asli client area
+
+| Login | Dashboard client |
+| --- | --- |
+| <img src="assets/asli/login-asli-timpapanel-1280.png" width="400" alt="Login asli"> | <img src="assets/asli/dashboard-client.png" width="400" alt="Dashboard client asli"> |
+
+Login dengan logo GarudaDeck 36px di kiri atas. Dashboard menampilkan banner pengumuman info, quick link telegram, status 14 server, daftar server dengan tombol power.
+
+| Console real time | File manager |
+| --- | --- |
+| <img src="assets/asli/console.png" width="400" alt="Console asli"> | <img src="assets/asli/files.png" width="400" alt="File manager asli"> |
+
+Console dengan sidebar 01 console sampai 11 activity plus domain di 08, tombol start restart stop, log streaming Telegram bot, panel resource CPU memory disk network. File manager dengan pencarian global, tombol upload new file new directory, daftar folder container lengkap.
+
+| Databases | Schedules |
+| --- | --- |
+| <img src="assets/asli/databases.png" width="400" alt="Databases asli"> | <img src="assets/asli/schedules.png" width="400" alt="Schedules asli"> |
+
+| Users | Backups |
+| --- | --- |
+| <img src="assets/asli/users.png" width="400" alt="Users asli"> | <img src="assets/asli/backups.png" width="400" alt="Backups asli"> |
+
+| Network | Startup |
+| --- | --- |
+| <img src="assets/asli/network.png" width="400" alt="Network asli"> | <img src="assets/asli/startup.png" width="400" alt="Startup asli"> |
+
+| Settings | Account |
+| --- | --- |
+| <img src="assets/asli/settings.png" width="400" alt="Settings asli"> | <img src="assets/asli/account.png" width="400" alt="Account asli"> |
+
+## Galeri asli admin panel
+
+| Control room | Servers |
+| --- | --- |
+| <img src="assets/asli/admin-control-room.png" width="400" alt="Admin control room asli"> | <img src="assets/asli/admin-servers.png" width="400" alt="Admin servers asli"> |
+
+Control room menampilkan 32 server, 78 user, 3 node, action queue critical dan warning nyata. Servers menampilkan daftar lengkap dengan filter.
+
+| Pengumuman |
+| --- |
+| <img src="assets/asli/admin-pengumuman.png" width="800" alt="Admin pengumuman asli"> |
+
+Halaman pengumuman dengan tabel judul tema font jadwal active order, plus live preview light dan dark mode dengan cek kontras 4.50:1. Banner client hanya menampilkan satu yang live dengan urutan terkecil.
+
 ## Fitur lengkap
 
-- Console real time ala vscode: log streaming, tombol power start stop restart kill, indikator resource CPU RAM disk, panel instrumen dan uptime
-- File manager keren: browse, upload, edit, rename, pindah, chmod, hapus massal, cari global, breadcrumb, status folder
-- Database: buat database, rotate password, salin kredensial aman
-- Backup: buat dan kelola backup server, unduh dan restore
-- Jadwal: cron schedule plus task otomatis dengan editor visual
-- Jaringan: alokasi IP port, assign dan hapus alokasi
-- Pengguna: subuser dengan permission granular per fitur
-- Startup: editor variable startup plus docker image
-- Settings: rename server dan reinstall dengan konfirmasi aman
-- Domain kustom per server: form tambah domain, verifikasi TXT `_garuda` dan A, recheck otomatis tiap 30 menit, throttle anti spam
-- Pengumuman global: admin buat pengumuman, tampil sebagai banner ikut warna tema, satu pemenang aktif terkecil sort, dukung EN dan ID
-- Branding GarudaDeck: logo di login, favicon 33 file, komponen GarudaLogo reusable, patch login idempoten
-- Installer aman: cek OS panel PHP sebelum ubah, backup kode plus DB dengan MANIFEST, gagal otomatis rollback, verifikasi syntax dan route
+- Console real time: log streaming, tombol power start stop restart kill, kartu resource CPU RAM disk network, sidebar 11 menu plus domain
+- File manager: browse, upload, edit, rename, pindah, chmod, hapus massal, cari global, breadcrumb, info 4 files 14 folders 175 KB
+- Database, backup, schedules, network, users, startup, settings, activity, semuanya asli dari panel Pterodactyl plus sentuhan GarudaDeck
+- Domain kustom per server di menu 08 domain: verifikasi TXT dan A, recheck tiap 30 menit
+- Pengumuman global: admin kelola, client lihat satu banner live dengan sort terkecil, dukung EN dan ID
+- Branding: logo Garuda di login, favicon 33 file, komponen GarudaLogo
+- Installer: cek OS panel PHP, backup kode plus DB, gagal otomatis rollback
 
 ## Syarat VPS
 
 - OS: Ubuntu 20.04, 22.04, 24.04, Debian 11, 12
 - Panel 1.11 sampai 1.15 di `/var/www/pterodactyl`
 - PHP 8.2 atau 8.3, curl, tar, python3
-- Tutorial lengkap: TUTORIAL.md
+
+Tutorial lengkap: TUTORIAL.md
