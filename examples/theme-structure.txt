@@ -1,0 +1,13 @@
+GarudaDeck contoh struktur, bukan source asli.
+Source asli hanya di repo private garudadeck-theme dan package GHCR.
+theme-switcher/
+  installer/check.sh
+  installer/backup.sh
+  installer/apply.sh
+  installer/branding.sh
+  installer/install.sh
+  installer/rollback.sh
+  backend/app/Models/Announcement.php
+  backend/app/Models/ServerCustomDomain.php
+  frontend/tokens/garudadeck.json
+  frontend/public/garudadeck-logo.png
