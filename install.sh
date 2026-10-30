@@ -11,7 +11,9 @@ if [ "$(id -u)" != "0" ]; then
     if [ -f "$0" ] && [ "$0" != "bash" ] && [ "$0" != "-bash" ]; then
       exec sudo -E bash "$0" "$@"
     else
-      exec sudo -E bash -c "curl -fsSL $SELF_URL | bash -s -- $*" -- "$@"
+      TMP_SELF="$(mktemp)"
+      curl -fsSL "$SELF_URL" -o "$TMP_SELF"
+      exec sudo -E bash "$TMP_SELF" "$@"
     fi
   else
     echo "[garudadeck] ERROR: jalankan sebagai root atau install sudo dulu" >&2
@@ -19,7 +21,7 @@ if [ "$(id -u)" != "0" ]; then
   fi
 fi
 PACKAGE="${PACKAGE:-ghcr.io/verlangid11/garudadeck-theme}"
-TAG="${GARUDADECK_TAG:-1.15.2}"
+TAG="${GARUDADECK_TAG:-latest}"
 PANEL_DIR="${PANEL_DIR:-/var/www/pterodactyl}"
 ACTION="${1:-install}"
 TMP_DIR="$(mktemp -d)"
@@ -49,7 +51,7 @@ else
   TOKEN="$(curl -fsSL "https://ghcr.io/token?service=ghcr.io&scope=repository:${OWNER_LC}/garudadeck-theme:pull" | python3 -c "import json,sys; print(json.load(sys.stdin).get('token',''))")"
   [ -n "$TOKEN" ] || fail "gagal minta token anonim GHCR"
   MANIFEST="$(curl -fsSL -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.docker.distribution.manifest.v2+json" "https://ghcr.io/v2/${OWNER_LC}/garudadeck-theme/manifests/${TAG}")" || fail "manifest tidak ketemu"
-  DIGEST="$(echo "$MANIFEST" | python3 -c "import json,sys; d=json.load(sys.stdin); ls=d.get('layers',[]); print(ls[0]['digest'] if ls else '')")"
+  DIGEST="$(echo "$MANIFEST" | python3 -c "import json,sys; d=json.load(sys.stdin); ls=d.get('layers',[]); print(ls[-1]['digest'] if ls else '')")"
   [ -n "$DIGEST" ] || fail "layer tidak ketemu"
   curl -fsSL -H "Authorization: Bearer $TOKEN" "https://ghcr.io/v2/${OWNER_LC}/garudadeck-theme/blobs/$DIGEST" -o /tmp/layer.tar || fail "unduh layer gagal"
   tar -xzf /tmp/layer.tar -C "$TMP_DIR" || fail "ekstrak layer gagal"
