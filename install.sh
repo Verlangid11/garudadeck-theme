@@ -12,7 +12,7 @@ if [ "$(id -u)" != "0" ]; then
       exec sudo -E bash "$0" "$@"
     else
       TMP_SELF="$(mktemp)"
-      curl -fsSL "$SELF_URL" -o "$TMP_SELF"
+      curl -fsSL "$SELF_URL?x=$(date +%s)" -o "$TMP_SELF" || curl -fsSL "$SELF_URL" -o "$TMP_SELF"
       exec sudo -E bash "$TMP_SELF" "$@"
     fi
   else
