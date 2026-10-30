@@ -1,5 +1,4 @@
-# Tutorial GarudaDeck pakai bash, 5 menit
-Repo full private, install hanya lewat installer via GHCR public tanpa token. Tidak ada download manual dari GitHub.
+# Tutorial GarudaDeck 5 menit
 ## 1. Masuk VPS
 ```bash
 ssh user@ip-vps-kamu
@@ -10,18 +9,16 @@ grep "'version'" /var/www/pterodactyl/config/app.php
 php -v | head -1
 cat /etc/os-release | head -2
 ```
-Cocok bila panel 1.11 sampai 1.15, PHP 8.2 atau 8.3, OS Ubuntu 20.04, 22.04, 24.04, Debian 11, 12.
-## 3. Cek kompatibilitas via installer
+## 3. Cek kompatibilitas
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh | bash -s -- check
 ```
-## 4. Install via GHCR
+## 4. Install
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh | bash
 ```
-Installer otomatis unduh oras sekali pakai, pull ghcr.io/verlangid11/garudadeck-theme:1.15.2 tanpa token, lalu pasang tema, backup, branding, migrasi, dan verifikasi.
-## 5. Buka panel
-Refresh browser, logo GarudaDeck muncul di login dan favicon tab. Login admin, buka menu Pengumuman.
+## 5. Buka panel lalu login admin
+Refresh browser, logo GarudaDeck muncul di login dan favicon tab. Buka menu Pengumuman untuk coba banner global, buka salah satu server untuk coba console, file manager, database, backup, jadwal, dan domain kustom.
 ## 6. Bila error
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh | bash -s -- rollback
