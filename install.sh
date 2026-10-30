@@ -4,10 +4,15 @@
 # curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh | bash
 # Aksi: tambah -s -- check | backup | rollback
 set -euo pipefail
+SELF_URL="https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh"
 if [ "$(id -u)" != "0" ]; then
   if command -v sudo >/dev/null 2>&1; then
     echo "[garudadeck] bukan root, naik ke sudo otomatis"
-    exec sudo -E bash "$0" "$@"
+    if [ -f "$0" ] && [ "$0" != "bash" ] && [ "$0" != "-bash" ]; then
+      exec sudo -E bash "$0" "$@"
+    else
+      exec sudo -E bash -c "curl -fsSL $SELF_URL | bash -s -- $*" -- "$@"
+    fi
   else
     echo "[garudadeck] ERROR: jalankan sebagai root atau install sudo dulu" >&2
     exit 1
