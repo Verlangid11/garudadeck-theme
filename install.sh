@@ -1,7 +1,7 @@
 #!/bin/bash
 # GarudaDeck installer via GHCR public package, tanpa token, pola verlang docker.
-# Repo garudadeck-theme tetap private, package ghcr.io public, repo dist hanya etalase promo.
-# curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-dist/main/install.sh | bash
+# Repo garudadeck-dist tetap private, etalase ini garudadeck-theme, package ghcr.io public, repo dist hanya etalase promo.
+# curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh | bash
 # Aksi: tambah -s -- check | backup | rollback
 set -euo pipefail
 if [ "$(id -u)" != "0" ]; then

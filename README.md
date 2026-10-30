@@ -33,7 +33,7 @@ Catatan jujur: nama brand di panel masih TIMPAPANEL karena `APP_NAME` di `.env` 
 ## Install 1 menit pakai bash tanpa token
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-dist/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh | bash
 ```
 
 Contoh sukses:
@@ -50,15 +50,15 @@ Contoh sukses:
 ## Cek, backup, rollback
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-dist/main/install.sh | bash -s -- check
-curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-dist/main/install.sh | bash -s -- backup
-curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-dist/main/install.sh | bash -s -- rollback
+curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh | bash -s -- check
+curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh | bash -s -- backup
+curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh | bash -s -- rollback
 ```
 
 Panel beda folder:
 
 ```bash
-PANEL_DIR=/var/www/panel curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-dist/main/install.sh | bash -s -- install
+PANEL_DIR=/var/www/panel curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh | bash -s -- install
 ```
 
 ## Fitur utama
@@ -77,14 +77,14 @@ PANEL_DIR=/var/www/panel curl -fsSL https://raw.githubusercontent.com/Verlangid1
 
 ## Kenapa aman dan private
 
-- Repo `garudadeck-theme` full private, raw balas 404 tanpa akses
+- Repo `garudadeck-dist` full private, raw balas 404 tanpa akses
 - Repo ini hanya etalase promo berisi teks, logo, installer kecil, dan bukti screenshot asli
 - Payload tema hanya di package `ghcr.io/verlangid11/garudadeck-theme` public khusus package, pola sama seperti verlang docker
 - Contoh di `examples/` hanya struktur untuk dokumentasi, bukan source asli
 
 ## Rencana tukar nama repo
 
-Sesuai permintaan kamu: repo public `garudadeck-dist` akan menjadi `garudadeck-theme`, dan repo private `garudadeck-theme` akan menjadi `garudadeck-dist`. Perlu rename di Settings GitHub kedua repo plus update semua URL raw di README, TUTORIAL, dan install.sh. Saya siapkan setelah kamu konfirmasi karena rename butuh klik di web dan push ulang tag GHCR.
+Sesuai permintaan kamu: repo public sekarang `garudadeck-theme`, repo private sekarang `garudadeck-dist`. Swap sudah selesai via API.
 
 ## Dokumen lain
 
