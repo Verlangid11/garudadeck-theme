@@ -58,8 +58,20 @@ EN: automatic on mid-install failure. Manual:
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) rollback
 ```
 
+EN: rollback restores old code plus database snapshot. Uninstall is different, it only strips branding and keeps current data:
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) uninstall
+```
+
 ID: otomatis bila gagal di tengah install. Manual:
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) rollback
+```
+
+ID: rollback mengembalikan snapshot lama kode plus database. Uninstall beda, hanya melepas branding dan data saat ini tetap dipakai:
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) uninstall
 ```

@@ -1,7 +1,7 @@
 #!/bin/bash
 # GarudaDeck smart wrapper, bilingual ID EN, public via GHCR without token.
 # One command: bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh)
-# Menu numbers: 0 language, 1 install, 2 check, 3 backup, 4 rollback, 5 exit. Direct args still work.
+# Menu numbers: 0 language, 1 install, 2 check, 3 backup, 4 rollback, 6 uninstall, 5 exit. Direct args still work.
 set -euo pipefail
 SELF_URL="https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh"
 if [ "$(id -u)" != "0" ]; then
@@ -73,6 +73,7 @@ menu() {
     say "$C_BLUE" "  [2] Check VPS and panel, change nothing"
     say "$C_YELLOW" "  [3] Backup only, safe before changes"
     say "$C_MAGENTA" "  [4] Rollback to latest backup"
+    say "$C_RED" "  [6] Uninstall theme, keep servers and data"
     say "$C_CYAN" "  [0] Switch language (now: English)"
     say "$C_RED" "  [5] Exit"
   else
@@ -81,17 +82,18 @@ menu() {
     say "$C_BLUE" "  [2] Cek VPS dan panel, tanpa ubah apa pun"
     say "$C_YELLOW" "  [3] Backup saja, aman sebelum ubah"
     say "$C_MAGENTA" "  [4] Rollback ke backup terakhir"
+    say "$C_RED" "  [6] Uninstall theme, server dan data aman"
     say "$C_CYAN" "  [0] Ganti bahasa (saat ini: Indonesia)"
     say "$C_RED" "  [5] Keluar"
   fi
   echo ""
-  say "$C_DIM" "  $(T "Install 1 sampai 3 menit, aset sudah ikut paket." "Install takes 1 to 3 minutes, assets included.")"
+  say "$C_DIM" "  $(T "Install 1 sampai 3 menit, aset sudah ikut paket. Uninstall hanya lepas branding, rollback kembalikan snapshot lama." "Install takes 1 to 3 minutes, assets included. Uninstall only strips branding, rollback restores old snapshot.")"
   printf "%b" "$C_CYAN"
-  read -r -p "  $(T "Pilih [0-5] (default 1): " "Choose [0-5] (default 1): ")" PICK
+  read -r -p "  $(T "Pilih [0-6] (default 1): " "Choose [0-6] (default 1): ")" PICK
   printf "%b" "$C_RESET"
   PICK="${PICK:-1}"
   case "$PICK" in
-    1) ACTION="install" ;; 2) ACTION="check" ;; 3) ACTION="backup" ;; 4) ACTION="rollback" ;;
+    1) ACTION="install" ;; 2) ACTION="check" ;; 3) ACTION="backup" ;; 4) ACTION="rollback" ;; 6) ACTION="uninstall" ;;
     0) lang_menu; menu; return 0 ;;
     5) say "$C_GREEN" "  $(T "Siap, sampai jumpa bro" "Done, see you soon")"; exit 0 ;;
     *) say "$C_RED" "  $(T "Pilihan tidak dikenal, jalanin install" "Unknown choice, running install")"; ACTION="install" ;;
@@ -127,7 +129,7 @@ PANEL_DIR="${PANEL_DIR:-/var/www/pterodactyl}"
 ACTION=""
 RAW_ARGS=("$@")
 if [ $# -gt 0 ]; then
-  case "${1:-}" in install|check|backup|rollback) ACTION="$1"; shift || true ;; *) ACTION="" ;; esac
+  case "${1:-}" in install|check|backup|rollback|uninstall) ACTION="$1"; shift || true ;; *) ACTION="" ;; esac
 fi
 if [ -z "$GD_LANG" ]; then
   if [ -t 0 ] || [ -r /dev/tty ]; then
@@ -198,7 +200,7 @@ fi
 ok "$(T "panel ketemu, lanjut $ACTION" "panel found, continue $ACTION")"
 need curl
 need tar
-case "$ACTION" in install|check|backup|rollback) ;; *) fail "$(T "aksi tidak dikenal: $ACTION, pilih: install, check, backup, rollback" "unknown action: $ACTION, choose: install, check, backup, rollback")" ;; esac
+case "$ACTION" in install|check|backup|rollback|uninstall) ;; *) fail "$(T "aksi tidak dikenal: $ACTION, pilih: install, check, backup, rollback, uninstall" "unknown action: $ACTION, choose: install, check, backup, rollback, uninstall")" ;; esac
 OWNER_LC="$(echo "$PACKAGE" | cut -d/ -f2 | tr '[:upper:]' '[:lower:]')"
 PKG_REAL="ghcr.io/${OWNER_LC}/garudadeck-theme:${TAG}"
 ARCHIVE="$TMP_DIR/theme.tar.gz"

@@ -38,7 +38,8 @@ Then action menu:
 - `1` install Garuda Deck panel 1.15.2
 - `2` check VPS and panel, change nothing
 - `3` backup only, safe before changes
-- `4` rollback to latest backup
+- `4` rollback to latest backup snapshot, code plus database
+- `6` uninstall theme, strip branding only, keep servers and data
 - `5` exit
 
 Direct actions still work:
@@ -48,6 +49,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) check
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) backup
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) rollback
+bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) uninstall
 ```
 
 Custom panel path:
@@ -129,9 +131,9 @@ More guides in [docs/](.): [INSTALL-EN.md](docs/INSTALL-EN.md), [INSTALL-ID.md](
 - Root or sudo, at least 300 MB free disk.
 - Node and yarn are not needed on target VPS.
 
-## Backup and rollback
+## Backup, rollback, and uninstall
 
-Backup is stored automatically before install. Manual rollback from menu number 4. Disable auto rollback with `AUTO_ROLLBACK=0`.
+Backup is stored automatically before install. Manual rollback from menu number 4. Disable auto rollback with `AUTO_ROLLBACK=0`. Rollback restores the old code plus database snapshot. Uninstall from menu number 6 only strips Garuda Deck branding and watermark, restores stock name and icons, keeps current servers, users, databases, announcement and custom domain data, and makes a safety backup first.
 
 ## Brand
 
