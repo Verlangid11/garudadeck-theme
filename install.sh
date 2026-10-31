@@ -35,7 +35,7 @@ say() { printf "%b%s%b\n" "$1" "$2" "$C_RESET"; }
 is_en() { [ "$GD_LANG" = "en" ]; }
 T() { if is_en; then printf "%s" "$2"; else printf "%s" "$1"; fi; }
 banner() {
-  clear 2>/dev/null || true
+  if [ -t 1 ]; then clear 2>/dev/null || true; fi
   say "$C_PURPLE" "   ____                      _       ____            _"
   say "$C_PURPLE" "  / ___| __ _ _ __ _   _  __| | __ _|  _ \\  ___  ___| | __"
   say "$C_VIOLET" " | |  _ / _\` | '__| | | |/ _\` |/ _\` | | | |/ _ \\/ __| |/ /"
@@ -68,7 +68,7 @@ confirm() {
     printf "%b" "$C_YELLOW"
     read -r -p "  garudadeck@panel:~\$ $(T "$qid" "$qen") [y/N]: " ans
     printf "%b" "$C_RESET"
-  elif [ -r /dev/tty ]; then
+  elif [ -c /dev/tty ] 2>/dev/null && [ -t 1 ]; then
     printf "%b" "$C_YELLOW" > /dev/tty
     read -r -p "  garudadeck@panel:~\$ $(T "$qid" "$qen") [y/N]: " ans < /dev/tty
     printf "%b" "$C_RESET" > /dev/tty
@@ -101,7 +101,7 @@ menu() {
   printf "%b" "$C_GREY"
   if [ -t 0 ]; then
     read -r -p "  garudadeck@panel:~\$ run [0-6] (default 1): " PICK
-  elif [ -r /dev/tty ]; then
+  elif [ -c /dev/tty ] 2>/dev/null && [ -t 1 ]; then
     read -r -p "  garudadeck@panel:~\$ run [0-6] (default 1): " PICK < /dev/tty
   else
     PICK="1"
@@ -140,8 +140,10 @@ if [ $# -gt 0 ]; then
   case "${1:-}" in install|check|backup|rollback|uninstall) ACTION="$1"; shift || true ;; *) ACTION="" ;; esac
 fi
 if [ -z "$GD_LANG" ]; then
-  if [ -t 0 ] || [ -r /dev/tty ]; then
-    if [ -t 0 ]; then lang_menu; else lang_menu </dev/tty; fi
+  if [ -t 0 ]; then
+    lang_menu
+  elif [ -c /dev/tty ] 2>/dev/null && [ -t 1 ]; then
+    lang_menu </dev/tty || GD_LANG="id"
   else
     GD_LANG="id"
   fi
@@ -152,21 +154,34 @@ export GD_LANG="$GD_LANG"
 if [ -z "$ACTION" ]; then
   if [ -t 0 ]; then
     menu
-  elif [ -r /dev/tty ]; then
-    menu </dev/tty
+  elif [ -c /dev/tty ] 2>/dev/null && [ -t 1 ]; then
+    menu </dev/tty || ACTION="install"
   else
     ACTION="install"
   fi
 fi
 case "$ACTION" in install|check|backup|rollback|uninstall) ;; *) ACTION="install" ;; esac
 if [ "$ACTION" = "install" ]; then
-  confirm "Lanjut install GarudaDeck" "Continue GarudaDeck install" || { say "$C_GREY" "  $(T "Dibatalkan." "Cancelled.")"; exit 0; }
+  if [ -t 0 ]; then
+    confirm "Lanjut install GarudaDeck" "Continue GarudaDeck install" || { say "$C_GREY" "  $(T "Dibatalkan." "Cancelled.")"; exit 0; }
+  elif [ -c /dev/tty ] 2>/dev/null; then
+    # di curl pipe tanpa TTY jangan paksa y/n, langsung jalan biar tidak batal diam-diam
+    :
+  fi
 fi
 if [ "$ACTION" = "uninstall" ]; then
-  confirm "Uninstall ke vanilla resmi, lanjut" "Uninstall to official vanilla, continue" || { say "$C_GREY" "  $(T "Dibatalkan." "Cancelled.")"; exit 0; }
+  if [ -t 0 ]; then
+    confirm "Uninstall ke vanilla resmi, lanjut" "Uninstall to official vanilla, continue" || { say "$C_GREY" "  $(T "Dibatalkan." "Cancelled.")"; exit 0; }
+  elif [ -c /dev/tty ] 2>/dev/null && [ -t 1 ]; then
+    confirm "Uninstall ke vanilla resmi, lanjut" "Uninstall to official vanilla, continue" || { say "$C_GREY" "  $(T "Dibatalkan." "Cancelled.")"; exit 0; }
+  fi
 fi
 if [ "$ACTION" = "rollback" ]; then
-  confirm "Rollback ke backup terakhir, lanjut" "Rollback to latest backup, continue" || { say "$C_GREY" "  $(T "Dibatalkan." "Cancelled.")"; exit 0; }
+  if [ -t 0 ]; then
+    confirm "Rollback ke backup terakhir, lanjut" "Rollback to latest backup, continue" || { say "$C_GREY" "  $(T "Dibatalkan." "Cancelled.")"; exit 0; }
+  elif [ -c /dev/tty ] 2>/dev/null && [ -t 1 ]; then
+    confirm "Rollback ke backup terakhir, lanjut" "Rollback to latest backup, continue" || { say "$C_GREY" "  $(T "Dibatalkan." "Cancelled.")"; exit 0; }
+  fi
 fi
 TMP_DIR="$(mktemp -d)"
 cleanup() { rm -rf "$TMP_DIR"; }
@@ -224,9 +239,9 @@ ARCHIVE="$TMP_DIR/theme.tar.gz"
 EXTRACT="$TMP_DIR/extract"
 mkdir -p "$EXTRACT"
 if command -v docker >/dev/null 2>&1 && [ "${GARUDADECK_FORCE_API:-0}" != "1" ]; then
-  spinner "$(T "Menyiapkan paket..." "Preparing package...")" docker pull "$PKG_REAL" >/dev/null 2>&1 || fail "$(T "Gagal unduh paket." "Package download failed.")"
+  spinner "$(T "Menyiapkan paket..." "Preparing package...")" docker pull -q "$PKG_REAL" >/dev/null 2>&1 || fail "$(T "Gagal unduh paket." "Package download failed.")"
   CID="$(docker create "$PKG_REAL" 2>/dev/null)"
-  docker cp "$CID:/theme.tar.gz" "$ARCHIVE" >/dev/null 2>&1 || fail "$(T "Gagal salin paket." "Package copy failed.")"
+  docker cp -q "$CID:/theme.tar.gz" "$ARCHIVE" >/dev/null 2>&1 || fail "$(T "Gagal salin paket." "Package copy failed.")"
   docker rm "$CID" >/dev/null 2>&1 || true
   ok "$(T "Paket siap." "Package ready.")"
 else
