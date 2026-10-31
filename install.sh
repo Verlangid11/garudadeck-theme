@@ -34,20 +34,19 @@ banner() {
   say "$C_YELLOW" " | |  _ / _\` | '__| | | | |/ _\` | | | |/ _ \\\\/ __| |/ /"
   say "$C_YELLOW" " | |_| | (_| | |  | |_| | | (_| | |_| |  __/ (__|   <"
   say "$C_GREEN" "  \\\\____|\\\\__,_|_|   \\\\__,_|_|\\\\__,_|____/ \\\\___|\\\\___|_|\\\\_\\\\"
-  say "$C_CYAN" "  GarudaDeck Installer, panel Pterodactyl 1.15.2 original, by verlangid dari Indonesia, MIT"
-  say "$C_DIM" "  Panel: ${PANEL_DIR:-/var/www/pterodactyl}, paket: ghcr.io/verlangid11/garudadeck-theme:${TAG:-latest}"
+  say "$C_CYAN" "  GarudaDeck Installer, panel Garuda Deck 1.15.2, MIT"
   echo ""
 }
 menu() {
   banner
   say "$C_WHITE" "  Mau ngapain hari ini bro?"
-  say "$C_GREEN" "  [1] Install panel original 1.15.2, bersih dari tema GarudaDeck"
+  say "$C_GREEN" "  [1] Install panel Garuda Deck 1.15.2"
   say "$C_BLUE" "  [2] Cek VPS dan panel, tanpa ubah apa pun"
-  say "$C_YELLOW" "  [3] Backup saja, kode plus database"
-  say "$C_MAGENTA" "  [4] Rollback kode dan database ke backup terakhir"
+  say "$C_YELLOW" "  [3] Backup saja, aman sebelum ubah"
+  say "$C_MAGENTA" "  [4] Rollback ke backup terakhir"
   say "$C_RED" "  [5] Keluar"
   echo ""
-  say "$C_DIM" "  Install 1 sampai 3 menit, tanpa yarn build, aset frontend sudah ikut paket."
+  say "$C_DIM" "  Install 1 sampai 3 menit, aset sudah ikut paket."
   printf "%b" "$C_CYAN"
   read -r -p "  Pilih [1-5] (default 1): " PICK
   printf "%b" "$C_RESET"
@@ -60,7 +59,7 @@ spin_pull() {
   local msg="$1"; shift
   local frames="⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏"
   printf "%b" "$C_CYAN" >&2
-  "$@" >/tmp/gd-pull.log 2>&1 &
+  "$@" >"$TMP_DIR/pull.log" 2>&1 &
   local pid=$!
   local i=0
   while kill -0 $pid 2>/dev/null; do
@@ -74,7 +73,7 @@ spin_pull() {
   local code=$?
   printf "\r%b" "$C_RESET" >&2
   if [ $code -ne 0 ]; then
-    tail -5 /tmp/gd-pull.log >&2 || true
+    echo "cek koneksi lalu coba lagi" >&2
     return $code
   fi
   say "$C_GREEN" "  done: $msg"
@@ -109,9 +108,9 @@ find_panel() {
   return 1
 }
 if [ -t 0 ] && [ "$ACTION" = "install" ]; then banner; fi
-say "$C_WHITE" "  Halo bro, GarudaDeck siap jalan di $PANEL_DIR, aksi $ACTION."
+say "$C_WHITE" "  Halo bro, GarudaDeck siap jalan, aksi $ACTION."
 if ! find_panel "$PANEL_DIR" >/dev/null 2>&1; then
-  warn "panel tidak ketemu di $PANEL_DIR, cari otomatis dulu"
+  warn "panel tidak ketemu di lokasi default, cari otomatis dulu"
   FOUND=""
   for d in /var/www/pterodactyl /var/www/panel /var/www/ptero /srv/pterodactyl /opt/pterodactyl /var/www/html; do
     if find_panel "$d" >/dev/null 2>&1; then FOUND="$d"; break; fi
@@ -124,13 +123,13 @@ if ! find_panel "$PANEL_DIR" >/dev/null 2>&1; then
     fi
   fi
   if [ -n "$FOUND" ]; then
-    ok "ketemu panel di $FOUND, pakai itu"
+    ok "panel ketemu, lanjut $ACTION"
     PANEL_DIR="$FOUND"
   else
-    fail "panel Pterodactyl tidak ketemu. Ciri: tidak ada artisan dan config/app.php di /var/www. Install panel dulu atau set PANEL_DIR manual"
+    fail "panel tidak ketemu. Install panel dulu atau set PANEL_DIR manual"
   fi
 fi
-ok "panel ketemu di $PANEL_DIR"
+ok "panel ketemu, lanjut $ACTION"
 need curl
 need tar
 case "$ACTION" in install|check|backup|rollback) ;; *) fail "aksi tidak dikenal: $ACTION, pilih: install, check, backup, rollback" ;; esac
@@ -138,10 +137,10 @@ OWNER_LC="$(echo "$PACKAGE" | cut -d/ -f2 | tr '[:upper:]' '[:lower:]')"
 PKG_REAL="ghcr.io/${OWNER_LC}/garudadeck-theme:${TAG}"
 ARCHIVE="$TMP_DIR/theme.tar.gz"
 EXTRACT="$TMP_DIR/extract"
-log "paket $PKG_REAL, panel $PANEL_DIR, aksi $ACTION"
+log "paket siap, aksi $ACTION"
 mkdir -p "$EXTRACT"
 if command -v docker >/dev/null 2>&1 && [ "${GARUDADECK_FORCE_API:-0}" != "1" ]; then
-  spin_pull "tarik paket public tanpa token" docker pull "$PKG_REAL" || fail "gagal pull $PKG_REAL, cek koneksi atau coba GARUDADECK_TAG=latest"
+  spin_pull "tarik paket installer" docker pull "$PKG_REAL" >/dev/null 2>&1 || fail "gagal tarik paket, cek koneksi"
   CID="$(docker create "$PKG_REAL")"
   docker cp "$CID:/theme.tar.gz" "$ARCHIVE" || fail "gagal salin dari image"
   docker rm "$CID" >/dev/null
@@ -154,9 +153,9 @@ else
     log "docker tidak ada, tarik via API GHCR tanpa token"
   fi
   TOKEN="$(curl -fsSL "https://ghcr.io/token?service=ghcr.io&scope=repository:${OWNER_LC}/garudadeck-theme:pull" | python3 -c "import json,sys; print(json.load(sys.stdin).get('token',''))")"
-  [ -n "$TOKEN" ] || fail "gagal minta token anonim GHCR, cek koneksi"
+  [ -n "$TOKEN" ] || fail "gagal siapkan unduhan, cek koneksi"
   ACCEPT="application/vnd.oci.image.index.v1+json, application/vnd.docker.distribution.manifest.list.v2+json, application/vnd.oci.image.manifest.v1+json, application/vnd.docker.distribution.manifest.v2+json"
-  MANIFEST="$(curl -fsSL -H "Authorization: Bearer $TOKEN" -H "Accept: $ACCEPT" "https://ghcr.io/v2/${OWNER_LC}/garudadeck-theme/manifests/${TAG}")" || fail "manifest $TAG tidak ketemu, coba GARUDADECK_TAG=latest"
+  MANIFEST="$(curl -fsSL -H "Authorization: Bearer $TOKEN" -H "Accept: $ACCEPT" "https://ghcr.io/v2/${OWNER_LC}/garudadeck-theme/manifests/${TAG}")" || fail "paket tidak ketemu, coba lagi nanti"
   case "$(uname -m)" in
     x86_64) PLAT="amd64" ;;
     aarch64|arm64) PLAT="arm64" ;;
@@ -164,11 +163,11 @@ else
   esac
   MDIGEST="$(echo "$MANIFEST" | PLAT="$PLAT" python3 -c "import json,sys,os; d=json.load(sys.stdin); p=os.environ['PLAT']; print(next((m['digest'] for m in d.get('manifests',[]) if m.get('platform',{}).get('os')=='linux' and m.get('platform',{}).get('architecture')==p), ''))")"
   if [ -n "$MDIGEST" ]; then
-    MANIFEST="$(curl -fsSL -H "Authorization: Bearer $TOKEN" -H "Accept: $ACCEPT" "https://ghcr.io/v2/${OWNER_LC}/garudadeck-theme/manifests/${MDIGEST}")" || fail "manifest platform $PLAT tidak ketemu"
+    MANIFEST="$(curl -fsSL -H "Authorization: Bearer $TOKEN" -H "Accept: $ACCEPT" "https://ghcr.io/v2/${OWNER_LC}/garudadeck-theme/manifests/${MDIGEST}")" || fail "paket tidak cocok untuk mesin ini"
   fi
   DIGEST="$(echo "$MANIFEST" | python3 -c "import json,sys; d=json.load(sys.stdin); ls=d.get('layers',[]); print(ls[-1]['digest'] if ls else '')")"
-  [ -n "$DIGEST" ] || fail "layer tidak ketemu di $TAG"
-  spin_pull "unduh layer GHCR" curl -fsSL -H "Authorization: Bearer $TOKEN" "https://ghcr.io/v2/${OWNER_LC}/garudadeck-theme/blobs/$DIGEST" -o "$TMP_DIR/layer.tar" || fail "unduh layer gagal"
+  [ -n "$DIGEST" ] || fail "paket tidak lengkap, coba lagi nanti"
+  spin_pull "unduh paket installer" curl -fsSL -H "Authorization: Bearer $TOKEN" "https://ghcr.io/v2/${OWNER_LC}/garudadeck-theme/blobs/$DIGEST" -o "$TMP_DIR/layer.tar" >/dev/null 2>&1 || fail "unduh paket gagal, cek koneksi"
   LAYERTMP="$(mktemp -d)"
   tar -xzf "$TMP_DIR/layer.tar" -C "$LAYERTMP" || fail "ekstrak layer gagal"
   FOUND_LAYER="$(find "$LAYERTMP" -name "theme.tar.gz" | head -1)"
