@@ -87,7 +87,7 @@ menu() {
     say "$C_RED" "  [5] Keluar"
   fi
   echo ""
-  say "$C_DIM" "  $(T "Install 1 sampai 3 menit, aset sudah ikut paket. Uninstall hanya lepas branding, rollback kembalikan snapshot lama." "Install takes 1 to 3 minutes, assets included. Uninstall only strips branding, rollback restores old snapshot.")"
+  say "$C_DIM" "  $(T "Install 1 sampai 3 menit, aset sudah ikut paket. Uninstall copot total ke vanilla resmi, rollback kembalikan snapshot lama." "Install takes 1 to 3 minutes, assets included. Uninstall wipes to official vanilla, rollback restores old snapshot.")"
   printf "%b" "$C_CYAN"
   read -r -p "  $(T "Pilih [0-6] (default 1): " "Choose [0-6] (default 1): ")" PICK
   printf "%b" "$C_RESET"
