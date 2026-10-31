@@ -69,7 +69,7 @@ Private repo keeps full build, payload, and release pipeline. Public repo never 
 |---|---|---|
 | ![admin](preview/panel/07-admin-overview.png) | ![users](preview/panel/10-admin-users.png) | ![servers](preview/panel/11-admin-servers.png) |
 
-Full sets: [preview/panel/ 16 shots: login, dashboard, account, api, ssh, activity, admin](preview/panel/), [preview/server/ 13 shots: console, files, editors, databases, schedules, users, backups, network, settings, startup, activity](preview/server/).
+Full sets: [preview/panel/ 17 shots: login, dashboard live Telegram project, account, api, ssh, activity, admin](preview/panel/), [preview/server/ 13 shots: console live Telegram project, files, editors, databases, schedules, users, backups, network, settings, startup, activity](preview/server/). All screenshots captured realtime from live Garuda Deck 1.15.2.
 
 ## Requirements / Syarat
 
