@@ -34,20 +34,20 @@ banner() {
   say "$C_YELLOW" " | |  _ / _\` | '__| | | | |/ _\` | | | |/ _ \\\\/ __| |/ /"
   say "$C_YELLOW" " | |_| | (_| | |  | |_| | | (_| | |_| |  __/ (__|   <"
   say "$C_GREEN" "  \\\\____|\\\\__,_|_|   \\\\__,_|_|\\\\__,_|____/ \\\\___|\\\\___|_|\\\\_\\\\"
-  say "$C_CYAN" "  GarudaDeck for Pterodactyl 1.11 sampai 1.15, by verlangid dari Indonesia, MIT"
+  say "$C_CYAN" "  GarudaDeck Installer, panel Pterodactyl 1.15.2 original, by verlangid dari Indonesia, MIT"
   say "$C_DIM" "  Panel: ${PANEL_DIR:-/var/www/pterodactyl}, paket: ghcr.io/verlangid11/garudadeck-theme:${TAG:-latest}"
   echo ""
 }
 menu() {
   banner
   say "$C_WHITE" "  Mau ngapain hari ini bro?"
-  say "$C_GREEN" "  [1] Install GarudaDeck, full build plus backup otomatis"
+  say "$C_GREEN" "  [1] Install panel original 1.15.2, bersih dari tema GarudaDeck"
   say "$C_BLUE" "  [2] Cek VPS dan panel, tanpa ubah apa pun"
   say "$C_YELLOW" "  [3] Backup saja, kode plus database"
-  say "$C_MAGENTA" "  [4] Rollback, kembali ke backup terakhir"
+  say "$C_MAGENTA" "  [4] Rollback kode dan database ke backup terakhir"
   say "$C_RED" "  [5] Keluar"
   echo ""
-  say "$C_DIM" "  Install butuh 2 sampai 5 menit, paling lama di yarn build."
+  say "$C_DIM" "  Install 1 sampai 3 menit, tanpa yarn build, aset frontend sudah ikut paket."
   printf "%b" "$C_CYAN"
   read -r -p "  Pilih [1-5] (default 1): " PICK
   printf "%b" "$C_RESET"
@@ -88,7 +88,13 @@ if [ $# -gt 0 ]; then
   case "${1:-}" in install|check|backup|rollback) ACTION="$1" ;; *) ACTION="" ;; esac
 fi
 if [ -z "$ACTION" ]; then
-  if [ -t 0 ]; then menu; else ACTION="install"; fi
+  if [ -t 0 ]; then
+    menu
+  elif [ -r /dev/tty ]; then
+    menu </dev/tty
+  else
+    ACTION="install"
+  fi
 fi
 TMP_DIR="$(mktemp -d)"
 cleanup() { rm -rf "$TMP_DIR"; }

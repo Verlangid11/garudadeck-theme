@@ -1,91 +1,85 @@
-# GarudaDeck Theme
+# GarudaDeck Installer
 
 <p align="center">
   <img src="garudadeck-logo.png" width="180" alt="GarudaDeck logo by verlangid">
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/panel-1.11--1.15-c8102e?style=for-the-badge" alt="panel">
+  <img src="https://img.shields.io/badge/panel-1.15.2-c8102e?style=for-the-badge" alt="panel">
   <img src="https://img.shields.io/badge/ubuntu-20.04_22.04_24.04-141414?style=for-the-badge" alt="ubuntu">
   <img src="https://img.shields.io/badge/debian-11_12-141414?style=for-the-badge" alt="debian">
   <img src="https://img.shields.io/badge/php-8.2_8.3-d4a017?style=for-the-badge" alt="php">
   <img src="https://img.shields.io/badge/install-bash_1_baris-35c26e?style=for-the-badge" alt="install">
 </p>
 
-<p align="center"><b>Tema Pterodactyl buatan verlangid dari Indonesia.</b> Install satu baris bash tanpa token.</p>
+<p align="center"><b>Installer Pterodactyl 1.15.2 original, bersih dari tema GarudaDeck.</b></p>
 
-<p align="center">Semua screenshot di bawah adalah capture nyata dari panel live <code>client.timpapanel.web.id</code>, bukan mockup.</p>
+Installer satu perintah untuk memasang source panel Pterodactyl **1.15.2 penuh** dan menghapus seluruh sisa tema GarudaDeck dari panel. Nama installer tetap **GarudaDeck**, dibuat oleh **verlangid** dari Indonesia, lisensi MIT.
 
-## Install 1 menit
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh | bash
-```
+## Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh | bash -s -- check
-curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh | bash -s -- backup
-curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh | bash -s -- rollback
+bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh)
 ```
 
-## Galeri asli client area
+Menu angka:
 
-| Login | Dashboard client |
-| --- | --- |
-| <img src="assets/asli/login-asli-timpapanel-1280.png" width="400" alt="Login asli"> | <img src="assets/asli/dashboard-client.png" width="400" alt="Dashboard client asli"> |
+1. Install panel original 1.15.2, bersih dari tema GarudaDeck
+2. Cek VPS dan panel, tanpa mengubah apa pun
+3. Backup kode plus database
+4. Rollback kode dan database ke backup terakhir
+5. Keluar
 
-Login dengan logo GarudaDeck 36px di kiri atas. Dashboard menampilkan banner pengumuman info, quick link telegram, status 14 server, daftar server dengan tombol power.
+Aksi langsung:
 
-| Console real time | File manager |
-| --- | --- |
-| <img src="assets/asli/console.png" width="400" alt="Console asli"> | <img src="assets/asli/files.png" width="400" alt="File manager asli"> |
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) check
+bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) backup
+bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) rollback
+```
 
-Console dengan sidebar 01 console sampai 11 activity plus domain di 08, tombol start restart stop, log streaming Telegram bot, panel resource CPU memory disk network. File manager dengan pencarian global, tombol upload new file new directory, daftar folder container lengkap.
+Panel di path lain:
 
-| Databases | Schedules |
-| --- | --- |
-| <img src="assets/asli/databases.png" width="400" alt="Databases asli"> | <img src="assets/asli/schedules.png" width="400" alt="Schedules asli"> |
+```bash
+PANEL_DIR=/var/www/panel bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh)
+```
 
-| Users | Backups |
-| --- | --- |
-| <img src="assets/asli/users.png" width="400" alt="Users asli"> | <img src="assets/asli/backups.png" width="400" alt="Backups asli"> |
+## Yang dilakukan installer
 
-| Network | Startup |
-| --- | --- |
-| <img src="assets/asli/network.png" width="400" alt="Network asli"> | <img src="assets/asli/startup.png" width="400" alt="Startup asli"> |
+1. Cek OS, PHP, panel, database, dan ruang disk.
+2. Backup kode plus database ke `theme-backups/`.
+3. Hapus semua sisa GarudaDeck: file tema, aset publik, route, controller, model, migrasi, tabel `announcements` dan `server_custom_domains`, serta baris migrasinya.
+4. Ekstrak source Pterodactyl 1.15.2 penuh. Aset frontend sudah ikut paket, tanpa `yarn build`.
+5. Jalankan `composer install` hanya bila `vendor` hilang atau `composer.lock` berubah.
+6. Migrasi database, bersihkan cache, perbaiki permission dan symlink `public/storage`.
+7. Verifikasi versi, manifest aset, CSS admin, syntax PHP, kebersihan database, dan memastikan `.env` tidak berubah.
 
-| Settings | Account |
-| --- | --- |
-| <img src="assets/asli/settings.png" width="400" alt="Settings asli"> | <img src="assets/asli/account.png" width="400" alt="Account asli"> |
+## Yang dipertahankan
 
-## Galeri asli admin panel
+- `.env` panel tujuan, termasuk kredensial database dan `APP_URL`.
+- Isi `storage/` dan `storage/app/public`.
+- Data database selain tabel tema GarudaDeck.
+- Fitur kustom non-tema: dashboard links, avatar, uptime samples, resource samples, SEO, dan konfigurasi panel lainnya.
 
-| Control room | Servers |
-| --- | --- |
-| <img src="assets/asli/admin-control-room.png" width="400" alt="Admin control room asli"> | <img src="assets/asli/admin-servers.png" width="400" alt="Admin servers asli"> |
+## Syarat
 
-Control room menampilkan 32 server, 78 user, 3 node, action queue critical dan warning nyata. Servers menampilkan daftar lengkap dengan filter.
+- Ubuntu 20.04, 22.04, 24.04 atau Debian 11, 12.
+- PHP 8.2 atau 8.3 dengan `pdo_mysql`.
+- Panel Pterodactyl 1.11 sampai 1.15 di `PANEL_DIR`.
+- `.env` berisi `DB_DATABASE` dan `DB_USERNAME`.
+- Root atau sudo, ruang disk minimal 300 MB.
+- Node dan yarn tidak dibutuhkan di VPS tujuan.
 
-| Pengumuman |
-| --- |
-| <img src="assets/asli/admin-pengumuman.png" width="800" alt="Admin pengumuman asli"> |
+## Backup dan rollback
 
-Halaman pengumuman dengan tabel judul tema font jadwal active order, plus live preview light dan dark mode dengan cek kontras 4.50:1. Banner client hanya menampilkan satu yang live dengan urutan terkecil.
+Backup disimpan di:
 
-## Fitur lengkap
+```text
+/var/www/pterodactyl/theme-backups/pterodactyl-original-1.15.2-YYYYMMDD-HHMMSS/
+```
 
-- Console real time: log streaming, tombol power start stop restart kill, kartu resource CPU RAM disk network, sidebar 11 menu plus domain
-- File manager: browse, upload, edit, rename, pindah, chmod, hapus massal, cari global, breadcrumb, info 4 files 14 folders 175 KB
-- Database, backup, schedules, network, users, startup, settings, activity, semuanya asli dari panel Pterodactyl plus sentuhan GarudaDeck
-- Domain kustom per server di menu 08 domain: verifikasi TXT dan A, recheck tiap 30 menit
-- Pengumuman global: admin kelola, client lihat satu banner live dengan sort terkecil, dukung EN dan ID
-- Branding: logo Garuda di login, favicon 33 file, komponen GarudaLogo
-- Installer: cek OS panel PHP, backup kode plus DB, gagal otomatis rollback
+Gagal di tengah install berarti rollback otomatis ke backup barusan. Rollback manual lewat menu nomor 4. Matikan rollback otomatis dengan `AUTO_ROLLBACK=0`.
 
-## Syarat VPS
+## Lisensi
 
-- OS: Ubuntu 20.04, 22.04, 24.04, Debian 11, 12
-- Panel 1.11 sampai 1.15 di `/var/www/pterodactyl`
-- PHP 8.2 atau 8.3, curl, tar, python3
-
-Tutorial lengkap: TUTORIAL.md
+MIT. Dibuat oleh **verlangid** dari Indonesia.
