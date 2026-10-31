@@ -82,6 +82,8 @@ menu() {
   if is_en; then
     say "$C_WHITE" "  Select action:"
     say "$C_BLUE" "  [1] Install theme"
+    say "$C_BLUE" "  [7] Update"
+    say "$C_BLUE" "  [8] Reinstall"
     say "$C_GREY" "  [2] Check system"
     say "$C_VIOLET" "  [3] Backup"
     say "$C_PURPLE" "  [4] Rollback"
@@ -90,6 +92,8 @@ menu() {
   else
     say "$C_WHITE" "  Pilih aksi:"
     say "$C_BLUE" "  [1] Install theme"
+    say "$C_BLUE" "  [7] Update"
+    say "$C_BLUE" "  [8] Reinstall"
     say "$C_GREY" "  [2] Cek sistem"
     say "$C_VIOLET" "  [3] Backup"
     say "$C_PURPLE" "  [4] Rollback"
@@ -100,9 +104,9 @@ menu() {
   say "$C_DARK" "  ─────────────────────────────"
   printf "%b" "$C_GREY"
   if [ -t 0 ]; then
-    read -r -p "  garudadeck@panel:~\$ run [0-6] (default 1): " PICK
+    read -r -p "  garudadeck@panel:~\$ run [0-8] (default 1): " PICK
   elif [ -c /dev/tty ] 2>/dev/null && [ -t 1 ]; then
-    read -r -p "  garudadeck@panel:~\$ run [0-6] (default 1): " PICK < /dev/tty
+    read -r -p "  garudadeck@panel:~\$ run [0-8] (default 1): " PICK < /dev/tty
   else
     PICK="1"
   fi
@@ -110,6 +114,7 @@ menu() {
   PICK="${PICK:-1}"
   case "$PICK" in
     1) ACTION="install" ;; 2) ACTION="check" ;; 3) ACTION="backup" ;; 4) ACTION="rollback" ;; 6) ACTION="uninstall" ;;
+    7) ACTION="update" ;; 8) ACTION="reinstall" ;;
     0) lang_menu; menu; return 0 ;;
     5) say "$C_GREEN" "  $(T "Sampai jumpa." "Bye.")"; exit 0 ;;
     *) ACTION="install" ;;
@@ -137,7 +142,7 @@ TAG="${GARUDADECK_TAG:-latest}"
 PANEL_DIR="${PANEL_DIR:-/var/www/pterodactyl}"
 ACTION=""
 if [ $# -gt 0 ]; then
-  case "${1:-}" in install|check|backup|rollback|uninstall) ACTION="$1"; shift || true ;; *) ACTION="" ;; esac
+  case "${1:-}" in install|check|backup|rollback|uninstall|update|reinstall) ACTION="$1"; shift || true ;; *) ACTION="" ;; esac
 fi
 if [ -z "$GD_LANG" ]; then
   if [ -t 0 ]; then
@@ -160,13 +165,27 @@ if [ -z "$ACTION" ]; then
     ACTION="install"
   fi
 fi
-case "$ACTION" in install|check|backup|rollback|uninstall) ;; *) ACTION="install" ;; esac
+case "$ACTION" in install|check|backup|rollback|uninstall|update|reinstall) ;; *) ACTION="install" ;; esac
 if [ "$ACTION" = "install" ]; then
   if [ -t 0 ]; then
     confirm "Lanjut install GarudaDeck" "Continue GarudaDeck install" || { say "$C_GREY" "  $(T "Dibatalkan." "Cancelled.")"; exit 0; }
   elif [ -c /dev/tty ] 2>/dev/null; then
     # di curl pipe tanpa TTY jangan paksa y/n, langsung jalan biar tidak batal diam-diam
     :
+  fi
+fi
+if [ "$ACTION" = "update" ]; then
+  if [ -t 0 ]; then
+    confirm "Update ke versi terbaru, data server aman" "Update to latest, server data safe" || { say "$C_GREY" "  $(T "Dibatalkan." "Cancelled.")"; exit 0; }
+  elif [ -c /dev/tty ] 2>/dev/null && [ -t 1 ]; then
+    confirm "Update ke versi terbaru, data server aman" "Update to latest, server data safe" || { say "$C_GREY" "  $(T "Dibatalkan." "Cancelled.")"; exit 0; }
+  fi
+fi
+if [ "$ACTION" = "reinstall" ]; then
+  if [ -t 0 ]; then
+    confirm "Install ulang penuh, .env dan database server aman" "Full reinstall, .env and server database safe" || { say "$C_GREY" "  $(T "Dibatalkan." "Cancelled.")"; exit 0; }
+  elif [ -c /dev/tty ] 2>/dev/null && [ -t 1 ]; then
+    confirm "Install ulang penuh, .env dan database server aman" "Full reinstall, .env and server database safe" || { say "$C_GREY" "  $(T "Dibatalkan." "Cancelled.")"; exit 0; }
   fi
 fi
 if [ "$ACTION" = "uninstall" ]; then
