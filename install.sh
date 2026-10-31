@@ -140,7 +140,7 @@ ARCHIVE="$TMP_DIR/theme.tar.gz"
 EXTRACT="$TMP_DIR/extract"
 log "paket $PKG_REAL, panel $PANEL_DIR, aksi $ACTION"
 mkdir -p "$EXTRACT"
-if command -v docker >/dev/null 2>&1; then
+if command -v docker >/dev/null 2>&1 && [ "${GARUDADECK_FORCE_API:-0}" != "1" ]; then
   spin_pull "tarik paket public tanpa token" docker pull "$PKG_REAL" || fail "gagal pull $PKG_REAL, cek koneksi atau coba GARUDADECK_TAG=latest"
   CID="$(docker create "$PKG_REAL")"
   docker cp "$CID:/theme.tar.gz" "$ARCHIVE" || fail "gagal salin dari image"
@@ -148,15 +148,30 @@ if command -v docker >/dev/null 2>&1; then
   ok "paket ketarik, lanjut $ACTION"
 else
   need python3
-  log "docker tidak ada, tarik via API GHCR tanpa token"
+  if [ "${GARUDADECK_FORCE_API:-0}" = "1" ]; then
+    log "tarik via API GHCR tanpa token, docker dilewati"
+  else
+    log "docker tidak ada, tarik via API GHCR tanpa token"
+  fi
   TOKEN="$(curl -fsSL "https://ghcr.io/token?service=ghcr.io&scope=repository:${OWNER_LC}/garudadeck-theme:pull" | python3 -c "import json,sys; print(json.load(sys.stdin).get('token',''))")"
   [ -n "$TOKEN" ] || fail "gagal minta token anonim GHCR, cek koneksi"
-  MANIFEST="$(curl -fsSL -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.docker.distribution.manifest.v2+json" "https://ghcr.io/v2/${OWNER_LC}/garudadeck-theme/manifests/${TAG}")" || fail "manifest $TAG tidak ketemu, coba GARUDADECK_TAG=latest"
+  ACCEPT="application/vnd.oci.image.index.v1+json, application/vnd.docker.distribution.manifest.list.v2+json, application/vnd.oci.image.manifest.v1+json, application/vnd.docker.distribution.manifest.v2+json"
+  MANIFEST="$(curl -fsSL -H "Authorization: Bearer $TOKEN" -H "Accept: $ACCEPT" "https://ghcr.io/v2/${OWNER_LC}/garudadeck-theme/manifests/${TAG}")" || fail "manifest $TAG tidak ketemu, coba GARUDADECK_TAG=latest"
+  case "$(uname -m)" in
+    x86_64) PLAT="amd64" ;;
+    aarch64|arm64) PLAT="arm64" ;;
+    *) PLAT="$(uname -m)" ;;
+  esac
+  MDIGEST="$(echo "$MANIFEST" | PLAT="$PLAT" python3 -c "import json,sys,os; d=json.load(sys.stdin); p=os.environ['PLAT']; print(next((m['digest'] for m in d.get('manifests',[]) if m.get('platform',{}).get('os')=='linux' and m.get('platform',{}).get('architecture')==p), ''))")"
+  if [ -n "$MDIGEST" ]; then
+    MANIFEST="$(curl -fsSL -H "Authorization: Bearer $TOKEN" -H "Accept: $ACCEPT" "https://ghcr.io/v2/${OWNER_LC}/garudadeck-theme/manifests/${MDIGEST}")" || fail "manifest platform $PLAT tidak ketemu"
+  fi
   DIGEST="$(echo "$MANIFEST" | python3 -c "import json,sys; d=json.load(sys.stdin); ls=d.get('layers',[]); print(ls[-1]['digest'] if ls else '')")"
   [ -n "$DIGEST" ] || fail "layer tidak ketemu di $TAG"
-  spin_pull "unduh layer GHCR" curl -fsSL -H "Authorization: Bearer $TOKEN" "https://ghcr.io/v2/${OWNER_LC}/garudadeck-theme/blobs/$DIGEST" -o /tmp/layer.tar || fail "unduh layer gagal"
-  tar -xzf /tmp/layer.tar -C "$TMP_DIR" || fail "ekstrak layer gagal"
-  FOUND_LAYER="$(find "$TMP_DIR" -name "theme.tar.gz" | head -1)"
+  spin_pull "unduh layer GHCR" curl -fsSL -H "Authorization: Bearer $TOKEN" "https://ghcr.io/v2/${OWNER_LC}/garudadeck-theme/blobs/$DIGEST" -o "$TMP_DIR/layer.tar" || fail "unduh layer gagal"
+  LAYERTMP="$(mktemp -d)"
+  tar -xzf "$TMP_DIR/layer.tar" -C "$LAYERTMP" || fail "ekstrak layer gagal"
+  FOUND_LAYER="$(find "$LAYERTMP" -name "theme.tar.gz" | head -1)"
   [ -n "$FOUND_LAYER" ] || fail "theme.tar.gz tidak ada di image"
   cp "$FOUND_LAYER" "$ARCHIVE"
 fi
