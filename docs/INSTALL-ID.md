@@ -47,7 +47,23 @@ bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme
 
 Atau pilih menu nomor 4. Rollback mengembalikan snapshot lama berisi kode plus database.
 
-## 6. Uninstall theme, data aman
+## 6. Update, data tidak dihapus
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) update
+```
+
+Atau pilih menu nomor 7. Tarik versi terbaru tanpa hapus data server.
+
+## 7. Install ulang, data tetap aman
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) reinstall
+```
+
+Atau pilih menu nomor 8. Install ulang penuh, `.env` dan database server tetap aman.
+
+## 8. Uninstall theme, data aman
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) uninstall

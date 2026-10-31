@@ -47,7 +47,23 @@ bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme
 
 Or choose menu number 4. Rollback restores old code plus database snapshot.
 
-## 6. Uninstall theme, keep data
+## 6. Update, no data wiped
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) update
+```
+
+Or choose menu number 7. Pull latest without wiping server data.
+
+## 7. Reinstall, data stays safe
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) reinstall
+```
+
+Or choose menu number 8. Full reinstall, `.env` and server database stay safe.
+
+## 8. Uninstall theme, keep data
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) uninstall

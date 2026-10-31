@@ -38,6 +38,8 @@ Lalu menu aksi:
 - `3` backup saja, aman sebelum ubah
 - `4` rollback ke snapshot backup lama, kode plus database
 - `6` uninstall theme, kebalikan penuh install, kembali ke Pterodactyl default
+- `7` update ke versi terbaru, data server tetap aman
+- `8` install ulang penuh, `.env` dan database server tetap aman
 - `5` keluar
 
 Aksi langsung tetap bisa:
@@ -47,6 +49,8 @@ bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) check
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) backup
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) rollback
+bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) update
+bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) reinstall
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) uninstall
 ```
 

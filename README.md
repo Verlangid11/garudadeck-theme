@@ -33,7 +33,7 @@ Language menu first / Menu bahasa dulu:
 - `[1]` Indonesia (default)
 - `[2]` English
 
-Action menu / Menu aksi: `0` language / bahasa, `1` install, `2` check / cek, `3` backup, `4` rollback, `6` uninstall full reverse to stock / lepas total ke default, `5` exit / keluar. Rollback restores old snapshot code plus database / mengembalikan snapshot lama kode plus database. Uninstall reverse of install, back to stock Pterodactyl default / kebalikan install, kembali ke Pterodactyl default.
+Action menu / Menu aksi: `0` language / bahasa, `1` install, `2` check / cek, `3` backup, `4` rollback, `6` uninstall full reverse to stock / lepas total ke default, `7` update without wiping server data / update tanpa hapus data server, `8` full reinstall but `.env` and server database stay safe / install ulang penuh tapi `.env` dan database server tetap aman, `5` exit / keluar. Rollback restores old snapshot code plus database / mengembalikan snapshot lama kode plus database. Uninstall reverse of install, back to stock Pterodactyl default / kebalikan install, kembali ke Pterodactyl default.
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) en install

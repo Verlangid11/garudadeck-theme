@@ -40,6 +40,8 @@ Then action menu:
 - `3` backup only, safe before changes
 - `4` rollback to latest backup snapshot, code plus database
 - `6` uninstall theme, full reverse of install, back to stock Pterodactyl default
+- `7` update to latest, server data stays safe
+- `8` full reinstall, `.env` and server database stay safe
 - `5` exit
 
 Direct actions still work:
@@ -49,6 +51,8 @@ bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) check
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) backup
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) rollback
+bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) update
+bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) reinstall
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) uninstall
 ```
 
