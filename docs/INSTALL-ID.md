@@ -53,7 +53,7 @@ Atau pilih menu nomor 4. Rollback mengembalikan snapshot lama berisi kode plus d
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) uninstall
 ```
 
-Atau pilih menu nomor 6. Uninstall adalah kebalikan realtime dari install: copot semua Garuda Deck sampai bersih, kembali ke Pterodactyl default, data server dan user aman, backup pengaman dibuat dulu.
+Atau pilih menu nomor 6. Uninstall adalah kebalikan realtime dari install: hapus semua build Garuda Deck, pasang vanilla Pterodactyl 1.15.2 resmi, tanpa foto, tanpa watermark, tanpa pengumuman, tanpa custom domain, data server aman, backup pengaman dibuat dulu.
 
 ## Catatan
 

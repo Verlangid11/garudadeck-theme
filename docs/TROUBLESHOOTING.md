@@ -58,7 +58,7 @@ EN: automatic on mid-install failure. Manual:
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) rollback
 ```
 
-EN: rollback restores old code plus database snapshot. Uninstall is different, it is the realtime reverse of install: strip all Garuda Deck and restore stock Pterodactyl default, server data kept:
+EN: rollback restores old code plus database snapshot. Uninstall is different, it is the realtime reverse of install: delete all Garuda Deck builds and install official vanilla Pterodactyl, no theme left, server data kept:
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) uninstall
@@ -70,7 +70,7 @@ ID: otomatis bila gagal di tengah install. Manual:
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) rollback
 ```
 
-ID: rollback mengembalikan snapshot lama kode plus database. Uninstall beda, ia kebalikan realtime dari install: copot semua Garuda Deck dan kembali ke Pterodactyl default, data server tetap:
+ID: rollback mengembalikan snapshot lama kode plus database. Uninstall beda, ia kebalikan realtime dari install: hapus semua build Garuda Deck dan pasang vanilla Pterodactyl resmi, tanpa sisa theme, data server tetap:
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) uninstall

@@ -131,7 +131,7 @@ Panduan lain di [docs/](../docs/): [INSTALL-ID.md](INSTALL-ID.md), [INSTALL-EN.m
 
 ## Backup, rollback, dan uninstall
 
-Backup tersimpan otomatis sebelum install. Rollback manual lewat menu nomor 4. Matikan rollback otomatis dengan `AUTO_ROLLBACK=0`. Rollback mengembalikan snapshot backup lama berisi kode plus database. Uninstall lewat menu nomor 6 adalah kebalikan realtime dari install: copot semua file Garuda Deck sampai bersih, pasang ulang file stock Pterodactyl, buang tabel dan migrasi Garuda, kembalikan nama dan SEO ke default, data server dan user tetap aman, dan selalu buat backup pengaman dulu.
+Backup tersimpan otomatis sebelum install. Rollback manual lewat menu nomor 4. Matikan rollback otomatis dengan `AUTO_ROLLBACK=0`. Rollback mengembalikan snapshot backup lama berisi kode plus database. Uninstall lewat menu nomor 6 adalah kebalikan realtime dari install: hapus semua build Garuda Deck, pasang file vanilla Pterodactyl 1.15.2 resmi, buang tabel dan migrasi Garuda, tanpa foto Garuda, tanpa watermark, tanpa pengumuman, tanpa custom domain, data server dan user tetap aman, dan selalu buat backup pengaman dulu.
 
 ## Brand
 
