@@ -20,7 +20,7 @@ Indonesia: panduan penuh di [docs/README-ID.md](docs/README-ID.md).
 
 One command installs full **Garuda Deck 1.15.2** panel. Installer name stays **GarudaDeck**, MIT license.
 
-Result: photo login with Garuda Deck image, name **Garuda Deck** everywhere. Watermark on every side: **Garuda Deck by verlangid from Indonesia**, covering login, client, server, and admin.
+Result: photo login with Garuda Deck image, name **Garuda Deck** everywhere, website photo and icons replaced with Garuda Deck logo, title **Garuda Deck | Game Server & Application Hosting**, description **Garuda Deck, panel hosting server game dan aplikasi by verlangid from Indonesia**. Watermark on every side: **Garuda Deck by verlangid from Indonesia**, covering login, client, server, and admin.
 
 ## Install / Instal
 

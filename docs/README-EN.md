@@ -19,7 +19,7 @@
 
 GarudaDeck installs a full **Garuda Deck 1.15.2** panel. Installer name stays **GarudaDeck**, MIT license.
 
-Final result: photo login with Garuda Deck image, name **Garuda Deck** everywhere, watermark **Garuda Deck by verlangid from Indonesia** on login, client, server, and admin sides.
+Final result: photo login with Garuda Deck image, name **Garuda Deck** everywhere, website photo and icons replaced with Garuda Deck logo, title **Garuda Deck | Game Server & Application Hosting**, description **Garuda Deck, panel hosting server game dan aplikasi by verlangid from Indonesia**, watermark **Garuda Deck by verlangid from Indonesia** on login, client, server, and admin sides.
 
 ## Quick install
 
@@ -75,8 +75,8 @@ QUIET=1 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudade
 2. Automatic backup before changes. Automatic rollback on mid-install failure.
 3. Remove all old theme leftovers completely.
 4. Install full Garuda Deck 1.15.2 panel, no manual build.
-5. Set Garuda Deck name, migrate, clear cache, fix permissions.
-6. Final verify: Garuda Deck name, photo, favicon, login watermark, client watermark, admin watermark.
+5. Set Garuda Deck name, title, description, photo, website icons, migrate, clear cache, fix permissions.
+6. Final verify: Garuda Deck name, photo, website icons, title, description, login watermark, client watermark, admin watermark.
 
 ## What is kept
 

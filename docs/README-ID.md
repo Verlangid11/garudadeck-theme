@@ -17,7 +17,7 @@
 
 GarudaDeck memasang panel **Garuda Deck 1.15.2** penuh. Nama installer tetap **GarudaDeck**, lisensi MIT.
 
-Hasil akhir: login berfoto Garuda Deck, nama **Garuda Deck** di semua sisi, watermark **Garuda Deck by verlangid from Indonesia** di login, client, server, dan admin.
+Hasil akhir: login berfoto Garuda Deck, nama **Garuda Deck** di semua sisi, foto dan ikon website diganti logo Garuda Deck, judul **Garuda Deck | Game Server & Application Hosting**, deskripsi **Garuda Deck, panel hosting server game dan aplikasi by verlangid from Indonesia**, watermark **Garuda Deck by verlangid from Indonesia** di login, client, server, dan admin.
 
 ## Install cepat
 
@@ -73,8 +73,8 @@ QUIET=1 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudade
 2. Backup otomatis sebelum ubah. Gagal di tengah berarti rollback otomatis.
 3. Bersihkan semua sisa tema lama sampai tuntas.
 4. Pasang panel Garuda Deck 1.15.2 penuh, tanpa build manual.
-5. Terapkan nama Garuda Deck, migrasi, bersihkan cache, perbaiki hak akses.
-6. Verifikasi akhir: nama Garuda Deck, foto, favicon, watermark login, watermark client, watermark admin.
+5. Terapkan nama, judul, deskripsi, foto, dan ikon website Garuda Deck, migrasi, bersihkan cache, perbaiki hak akses.
+6. Verifikasi akhir: nama, foto, ikon website, judul, deskripsi Garuda Deck, watermark login, watermark client, watermark admin.
 
 ## Yang dipertahankan
 
