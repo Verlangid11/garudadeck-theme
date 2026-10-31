@@ -57,13 +57,19 @@ Private repo keeps full build, payload, and release pipeline. Public repo never 
 
 ## Preview
 
-![login](preview/panel/01-login.png)
-![dashboard](preview/panel/02-dashboard.png)
-![console](preview/server/console.png)
-![files](preview/server/files.png)
-![admin](preview/panel/07-admin-overview.png)
+| Login | Dashboard | Console |
+|---|---|---|
+| ![login](preview/panel/01-login.png) | ![dashboard](preview/panel/02-dashboard.png) | ![console](preview/server/console.png) |
 
-Full sets: [preview/panel/](preview/panel/), [preview/server/](preview/server/).
+| Files | Databases | Network |
+|---|---|---|
+| ![files](preview/server/files.png) | ![databases](preview/server/databases.png) | ![network](preview/server/network.png) |
+
+| Admin overview | Users | Servers |
+|---|---|---|
+| ![admin](preview/panel/07-admin-overview.png) | ![users](preview/panel/10-admin-users.png) | ![servers](preview/panel/11-admin-servers.png) |
+
+Full sets: [preview/panel/ 16 shots: login, dashboard, account, api, ssh, activity, admin](preview/panel/), [preview/server/ 13 shots: console, files, editors, databases, schedules, users, backups, network, settings, startup, activity](preview/server/).
 
 ## Requirements / Syarat
 
