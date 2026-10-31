@@ -67,6 +67,26 @@ QUIET=1 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudade
 - Isi penyimpanan dan data panel.
 - Pengaturan yang sudah ada tetap dipakai.
 
+## Preview Garuda Deck
+
+Tampilan realtime dari VPS tujuan setelah install 6 tahap lolos:
+
+![login](preview/01-login.png)
+![dashboard](preview/02-dashboard.png)
+![account](preview/03-account.png)
+![api](preview/04-api.png)
+![ssh](preview/05-ssh.png)
+![activity](preview/06-activity.png)
+![admin overview](preview/07-admin-overview.png)
+![admin settings](preview/08-admin-settings.png)
+![admin users](preview/10-admin-users.png)
+![admin servers](preview/11-admin-servers.png)
+![admin nodes](preview/12-admin-nodes.png)
+![admin nests](preview/13-admin-nests.png)
+![admin databases](preview/14-admin-databases.png)
+![admin locations](preview/15-admin-locations.png)
+![admin mounts](preview/16-admin-mounts.png)
+
 ## Syarat
 
 - Ubuntu 20.04, 22.04, 24.04 atau Debian 11, 12.
