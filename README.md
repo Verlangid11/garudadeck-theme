@@ -87,6 +87,21 @@ Tampilan realtime dari VPS tujuan setelah install 6 tahap lolos:
 ![admin locations](preview/15-admin-locations.png)
 ![admin mounts](preview/16-admin-mounts.png)
 
+### Server GarudaCraft, Minecraft Paper
+
+![console](preview/server/console.png)
+![files](preview/server/files.png)
+![file json](preview/server/file-json.png)
+![file sql](preview/server/file-sql.png)
+![databases](preview/server/databases.png)
+![startup egg](preview/server/startup-egg.png)
+![network](preview/server/network.png)
+![backups](preview/server/backups.png)
+![schedules](preview/server/schedules.png)
+![users](preview/server/users.png)
+![settings](preview/server/settings.png)
+![activity](preview/server/activity.png)
+
 ## Syarat
 
 - Ubuntu 20.04, 22.04, 24.04 atau Debian 11, 12.
