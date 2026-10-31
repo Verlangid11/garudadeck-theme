@@ -81,19 +81,19 @@ menu() {
   banner
   if is_en; then
     say "$C_WHITE" "  Select action:"
-    say "$C_BLUE" "  [1] Install panel"
+    say "$C_BLUE" "  [1] Install theme"
     say "$C_GREY" "  [2] Check system"
     say "$C_VIOLET" "  [3] Backup"
     say "$C_PURPLE" "  [4] Rollback"
-    say "$C_RED" "  [6] Uninstall to vanilla"
+    say "$C_RED" "  [6] Uninstall theme"
     say "$C_GREY" "  [0] Language  [5] Exit"
   else
     say "$C_WHITE" "  Pilih aksi:"
-    say "$C_BLUE" "  [1] Install panel"
+    say "$C_BLUE" "  [1] Install theme"
     say "$C_GREY" "  [2] Cek sistem"
     say "$C_VIOLET" "  [3] Backup"
     say "$C_PURPLE" "  [4] Rollback"
-    say "$C_RED" "  [6] Uninstall ke vanilla"
+    say "$C_RED" "  [6] Uninstall theme"
     say "$C_GREY" "  [0] Bahasa  [5] Keluar"
   fi
   echo ""
@@ -241,7 +241,8 @@ mkdir -p "$EXTRACT"
 if command -v docker >/dev/null 2>&1 && [ "${GARUDADECK_FORCE_API:-0}" != "1" ]; then
   spinner "$(T "Menyiapkan paket..." "Preparing package...")" docker pull -q "$PKG_REAL" >/dev/null 2>&1 || fail "$(T "Gagal unduh paket." "Package download failed.")"
   CID="$(docker create "$PKG_REAL" 2>/dev/null)"
-  docker cp -q "$CID:/theme.tar.gz" "$ARCHIVE" >/dev/null 2>&1 || fail "$(T "Gagal salin paket." "Package copy failed.")"
+  docker cp -q "$CID:/theme.tar.gz" "$ARCHIVE" >/dev/null 2>&1 || docker cp "$CID:/theme.tar.gz" "$ARCHIVE" >/dev/null 2>&1 || fail "$(T "Gagal salin paket." "Package copy failed.")"
+  [ -s "$ARCHIVE" ] || fail "$(T "Gagal salin paket." "Package copy failed.")"
   docker rm "$CID" >/dev/null 2>&1 || true
   ok "$(T "Paket siap." "Package ready.")"
 else
