@@ -39,7 +39,7 @@ Then action menu:
 - `2` check VPS and panel, change nothing
 - `3` backup only, safe before changes
 - `4` rollback to latest backup snapshot, code plus database
-- `6` uninstall theme, strip branding only, keep servers and data
+- `6` uninstall theme, full reverse of install, back to stock Pterodactyl default
 - `5` exit
 
 Direct actions still work:
@@ -133,7 +133,7 @@ More guides in [docs/](.): [INSTALL-EN.md](docs/INSTALL-EN.md), [INSTALL-ID.md](
 
 ## Backup, rollback, and uninstall
 
-Backup is stored automatically before install. Manual rollback from menu number 4. Disable auto rollback with `AUTO_ROLLBACK=0`. Rollback restores the old code plus database snapshot. Uninstall from menu number 6 only strips Garuda Deck branding and watermark, restores stock name and icons, keeps current servers, users, databases, announcement and custom domain data, and makes a safety backup first.
+Backup is stored automatically before install. Manual rollback from menu number 4. Disable auto rollback with `AUTO_ROLLBACK=0`. Rollback restores an old backup snapshot of code plus database. Uninstall from menu number 6 is the realtime reverse of install: it strips all Garuda Deck files, restores stock Pterodactyl files, drops Garuda tables and migrations, resets name and SEO to default, keeps server and user data, and makes a safety backup first.
 
 ## Brand
 

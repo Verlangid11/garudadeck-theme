@@ -73,7 +73,7 @@ menu() {
     say "$C_BLUE" "  [2] Check VPS and panel, change nothing"
     say "$C_YELLOW" "  [3] Backup only, safe before changes"
     say "$C_MAGENTA" "  [4] Rollback to latest backup"
-    say "$C_RED" "  [6] Uninstall theme, keep servers and data"
+    say "$C_RED" "  [6] Uninstall theme, back to Pterodactyl default"
     say "$C_CYAN" "  [0] Switch language (now: English)"
     say "$C_RED" "  [5] Exit"
   else
@@ -82,7 +82,7 @@ menu() {
     say "$C_BLUE" "  [2] Cek VPS dan panel, tanpa ubah apa pun"
     say "$C_YELLOW" "  [3] Backup saja, aman sebelum ubah"
     say "$C_MAGENTA" "  [4] Rollback ke backup terakhir"
-    say "$C_RED" "  [6] Uninstall theme, server dan data aman"
+    say "$C_RED" "  [6] Uninstall theme, kembali ke Pterodactyl default"
     say "$C_CYAN" "  [0] Ganti bahasa (saat ini: Indonesia)"
     say "$C_RED" "  [5] Keluar"
   fi

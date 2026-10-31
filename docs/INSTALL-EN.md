@@ -53,7 +53,7 @@ Or choose menu number 4. Rollback restores old code plus database snapshot.
 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh) uninstall
 ```
 
-Or choose menu number 6. Uninstall only strips branding and watermark, restores stock name and icons, keeps current servers, users, databases, announcement and custom domain data, safety backup first.
+Or choose menu number 6. Uninstall is the realtime reverse of install: strip all Garuda Deck, restore stock Pterodactyl default, keep server and user data, safety backup first.
 
 ## Notes
 

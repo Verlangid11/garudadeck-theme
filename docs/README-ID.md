@@ -37,7 +37,7 @@ Lalu menu aksi:
 - `2` cek VPS dan panel, tanpa ubah apa pun
 - `3` backup saja, aman sebelum ubah
 - `4` rollback ke snapshot backup lama, kode plus database
-- `6` uninstall theme, hanya lepas branding, server dan data aman
+- `6` uninstall theme, kebalikan penuh install, kembali ke Pterodactyl default
 - `5` keluar
 
 Aksi langsung tetap bisa:
@@ -131,7 +131,7 @@ Panduan lain di [docs/](../docs/): [INSTALL-ID.md](INSTALL-ID.md), [INSTALL-EN.m
 
 ## Backup, rollback, dan uninstall
 
-Backup tersimpan otomatis sebelum install. Rollback manual lewat menu nomor 4. Matikan rollback otomatis dengan `AUTO_ROLLBACK=0`. Rollback mengembalikan snapshot lama berisi kode plus database. Uninstall lewat menu nomor 6 hanya melepas branding dan watermark Garuda Deck, mengembalikan nama dan ikon stock, data server, user, database, pengumuman, dan custom domain saat ini tetap dipakai, dan selalu buat backup pengaman dulu.
+Backup tersimpan otomatis sebelum install. Rollback manual lewat menu nomor 4. Matikan rollback otomatis dengan `AUTO_ROLLBACK=0`. Rollback mengembalikan snapshot backup lama berisi kode plus database. Uninstall lewat menu nomor 6 adalah kebalikan realtime dari install: copot semua file Garuda Deck sampai bersih, pasang ulang file stock Pterodactyl, buang tabel dan migrasi Garuda, kembalikan nama dan SEO ke default, data server dan user tetap aman, dan selalu buat backup pengaman dulu.
 
 ## Brand
 
