@@ -140,18 +140,14 @@ EXTRACT="$TMP_DIR/extract"
 log "paket siap, aksi $ACTION"
 mkdir -p "$EXTRACT"
 if command -v docker >/dev/null 2>&1 && [ "${GARUDADECK_FORCE_API:-0}" != "1" ]; then
-  spin_pull "tarik paket installer" docker pull "$PKG_REAL" >/dev/null 2>&1 || fail "gagal tarik paket, cek koneksi"
+  spin_pull "siapkan paket installer" docker pull "$PKG_REAL" >/dev/null 2>&1 || fail "gagal siapkan paket, cek koneksi"
   CID="$(docker create "$PKG_REAL")"
   docker cp "$CID:/theme.tar.gz" "$ARCHIVE" || fail "gagal salin dari image"
   docker rm "$CID" >/dev/null
   ok "paket ketarik, lanjut $ACTION"
 else
   need python3
-  if [ "${GARUDADECK_FORCE_API:-0}" = "1" ]; then
-    log "tarik via API GHCR tanpa token, docker dilewati"
-  else
-    log "docker tidak ada, tarik via API GHCR tanpa token"
-  fi
+  log "siapkan paket installer"
   TOKEN="$(curl -fsSL "https://ghcr.io/token?service=ghcr.io&scope=repository:${OWNER_LC}/garudadeck-theme:pull" | python3 -c "import json,sys; print(json.load(sys.stdin).get('token',''))")"
   [ -n "$TOKEN" ] || fail "gagal siapkan unduhan, cek koneksi"
   ACCEPT="application/vnd.oci.image.index.v1+json, application/vnd.docker.distribution.manifest.list.v2+json, application/vnd.oci.image.manifest.v1+json, application/vnd.docker.distribution.manifest.v2+json"
@@ -167,7 +163,7 @@ else
   fi
   DIGEST="$(echo "$MANIFEST" | python3 -c "import json,sys; d=json.load(sys.stdin); ls=d.get('layers',[]); print(ls[-1]['digest'] if ls else '')")"
   [ -n "$DIGEST" ] || fail "paket tidak lengkap, coba lagi nanti"
-  spin_pull "unduh paket installer" curl -fsSL -H "Authorization: Bearer $TOKEN" "https://ghcr.io/v2/${OWNER_LC}/garudadeck-theme/blobs/$DIGEST" -o "$TMP_DIR/layer.tar" >/dev/null 2>&1 || fail "unduh paket gagal, cek koneksi"
+  spin_pull "siapkan paket installer" curl -fsSL -H "Authorization: Bearer $TOKEN" "https://ghcr.io/v2/${OWNER_LC}/garudadeck-theme/blobs/$DIGEST" -o "$TMP_DIR/layer.tar" >/dev/null 2>&1 || fail "gagal siapkan paket, cek koneksi"
   LAYERTMP="$(mktemp -d)"
   tar -xzf "$TMP_DIR/layer.tar" -C "$LAYERTMP" || fail "ekstrak layer gagal"
   FOUND_LAYER="$(find "$LAYERTMP" -name "theme.tar.gz" | head -1)"
