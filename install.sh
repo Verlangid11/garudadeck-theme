@@ -145,7 +145,9 @@ if [ $# -gt 0 ]; then
   case "${1:-}" in install|check|backup|rollback|uninstall|update|reinstall) ACTION="$1"; shift || true ;; *) ACTION="" ;; esac
 fi
 if [ -z "$GD_LANG" ]; then
-  if [ -t 0 ]; then
+  if [ -n "$ACTION" ]; then
+    GD_LANG="id"
+  elif [ -t 0 ]; then
     lang_menu
   elif [ -c /dev/tty ] 2>/dev/null && [ -t 1 ]; then
     lang_menu </dev/tty || GD_LANG="id"
