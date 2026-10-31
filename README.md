@@ -12,11 +12,11 @@
   <img src="https://img.shields.io/badge/install-bash_1_baris-35c26e?style=for-the-badge" alt="install">
 </p>
 
-<p align="center"><b>Installer panel Garuda Deck 1.15.2, berfoto Garuda Deck dan bernama Garuda Deck.</b></p>
+<p align="center"><b>Installer panel Garuda Deck 1.15.2.</b></p>
 
-Installer satu perintah untuk memasang panel **Garuda Deck 1.15.2 penuh** dan menghapus seluruh sisa tema lama dari panel. Nama installer tetap **GarudaDeck**, lisensi MIT.
+Installer satu perintah untuk memasang panel **Garuda Deck 1.15.2 penuh**. Nama installer tetap **GarudaDeck**, lisensi MIT.
 
-Hasil akhir: login memakai foto Garuda Deck, nama tampil **Garuda Deck** di login, admin, tab browser, dan SEO, favicon ikut foto Garuda Deck.
+Hasil akhir: login berfoto Garuda Deck, nama tampil **Garuda Deck** di semua tampilan.
 
 ## Install
 
@@ -46,7 +46,7 @@ Panel di path lain:
 PANEL_DIR=/var/www/panel bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh)
 ```
 
-Mode hemat info (output ringkas, tanpa detail teknis):
+Mode hemat info:
 
 ```bash
 QUIET=1 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudadeck-theme/main/install.sh)
@@ -54,21 +54,18 @@ QUIET=1 bash <(curl -fsSL https://raw.githubusercontent.com/Verlangid11/garudade
 
 ## Yang dilakukan installer
 
-1. Cek OS, PHP, panel, database, dan ruang disk. Gagal berarti batal sebelum ubah apa pun.
-2. Backup kode plus database. Otomatis rollback bila gagal di tengah jalan.
-3. Hapus semua sisa tema lama: file tema, aset publik, route, controller, model, migrasi, dan tabel tema.
-4. Ekstrak panel Garuda Deck 1.15.2 penuh. Aset frontend sudah ikut paket, tanpa `yarn build`.
-5. Jalankan `composer install` hanya bila `vendor` hilang atau `composer.lock` berubah.
-6. Migrasi database, set nama panel ke **Garuda Deck**, bersihkan cache, perbaiki permission dan symlink storage.
-7. Verifikasi versi, foto logo, favicon, tampilan login, manifest aset, CSS admin, syntax PHP, kebersihan database, nama Garuda Deck, dan `.env` tidak berubah.
-
-Installer cerdas: deteksi panel otomatis di path umum, validasi versi 1.11 sampai 1.15, tolak OS dan PHP yang tidak didukung, coba pasang `rsync` dan client database otomatis, retry unduhan paket, dan pesan error ramah tanpa detail private.
+1. Cek kompatibilitas VPS dan panel. Gagal berarti batal sebelum ubah apa pun.
+2. Backup otomatis sebelum ubah. Gagal di tengah berarti rollback otomatis.
+3. Bersihkan sisa tema lama sampai tuntas.
+4. Pasang panel Garuda Deck 1.15.2 penuh, tanpa build manual.
+5. Terapkan nama Garuda Deck dan rapikan cache serta hak akses.
+6. Verifikasi hasil akhir sampai nama Garuda Deck aktif.
 
 ## Yang dipertahankan
 
-- `.env` panel tujuan, kecuali nama panel diset ke Garuda Deck.
-- Isi `storage/` dan data database selain tabel tema lama.
-- Fitur kustom non-tema: dashboard links, avatar, uptime samples, resource samples, SEO, dan konfigurasi panel lainnya.
+- Konfigurasi panel tujuan.
+- Isi penyimpanan dan data panel.
+- Pengaturan yang sudah ada tetap dipakai.
 
 ## Syarat
 
@@ -80,11 +77,7 @@ Installer cerdas: deteksi panel otomatis di path umum, validasi versi 1.11 sampa
 
 ## Backup dan rollback
 
-Backup tersimpan otomatis sebelum install. Gagal di tengah install berarti rollback otomatis ke backup barusan. Rollback manual lewat menu nomor 4. Matikan rollback otomatis dengan `AUTO_ROLLBACK=0`.
-
-## Ganti foto
-
-Foto default ada di `public/garudadeck-logo.png`. Untuk ganti foto final, timpa file itu dengan PNG persegi, lalu refresh browser. Tidak perlu rebuild, tampilan login langsung memakai file baru dengan fallback huruf bila file hilang.
+Backup tersimpan otomatis sebelum install. Rollback manual lewat menu nomor 4. Matikan rollback otomatis dengan `AUTO_ROLLBACK=0`.
 
 ## Lisensi
 
